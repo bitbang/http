@@ -1,0 +1,24 @@
+{
+	"name": "bitbang/http",
+	"type": "library",
+	"description": "HTTP client library",
+	"license": ["MIT"],
+	"authors": [
+		{
+			"name": "Bitbang Contributors",
+			"homepage": "https://github.com/bitbang/http/graphs/contributors"
+		}
+	],
+	"require": {
+		"php": ">=5.4.0"
+	},
+	"require-dev": {
+		"nette/tester": "~1.3.0"
+	},
+	"suggest": {
+		"ext-curl": "Allows you to use Bitbang\\Http\\CurlClient"
+	},
+	"autoload": {
+		"classmap": ["src/Http/"]
+	}
+}
