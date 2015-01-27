@@ -12,15 +12,17 @@ Tester\Environment::setup();
 date_default_timezone_set('UTC');
 
 
-if (($listen = getenv('TESTS_HTTP_LISTEN')) === FALSE) {
-	Tester\Assert::fail("Missing 'TESTS_HTTP_LISTEN' environment variable. Did you use '--setup tests/setup.php' option?");
-}
-define('BASE_URL', "http://$listen");
-unset($listen);
-
-
 function test(\Closure $f) {
 	$f();
+}
+
+
+function getBaseUrl() {
+	$listen = getenv('TESTS_HTTP_LISTEN');
+	if ($listen === FALSE) {
+		Tester\Environment::skip("The 'TESTS_HTTP_LISTEN' environment variable is missing. Do you use '--setup tests/setup.php' option?");
+	}
+	return "http://$listen";
 }
 
 

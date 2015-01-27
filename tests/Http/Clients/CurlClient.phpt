@@ -9,7 +9,6 @@ if (!extension_loaded('curl')) {
 	Tester\Environment::skip('The cURL extension is required for the test.');
 }
 
-use Bitbang\Http;
 use Bitbang\Http\Clients;
 
 
@@ -22,4 +21,4 @@ class CurlClientTestCase extends ClientsTestCase
 
 }
 
-(new CurlClientTestCase(BASE_URL))->run();
+(new CurlClientTestCase(getBaseUrl()))->run();
