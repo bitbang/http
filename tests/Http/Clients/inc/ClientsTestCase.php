@@ -167,4 +167,38 @@ abstract class ClientsTestCase extends Tester\TestCase
 		Assert::type('Bitbang\Http\Response', $insideResponse);
 	}
 
+
+	public function testMaxRedirects()
+	{
+		$client = $this->createClient();
+		$client->onRequest(function() use (& $counter) {
+			$counter++;
+		});
+
+		$request = new Request('GET', $this->baseUrl . '/redirect-loop', ['X-Max-Loop-Count' => 5]);
+
+		$client->maxRedirects = 6;
+		$counter = -1;
+		$response = $client->request(clone $request);
+		Assert::same(5, $counter);
+		Assert::same('Redirection finished', $response->getContent());
+		Assert::same(200, $response->getCode());
+
+
+		$client->maxRedirects = 5;
+		$counter = -1;
+		$response = $client->request(clone $request);
+		Assert::same(5, $counter);
+		Assert::same('Redirection finished', $response->getContent());
+		Assert::same(200, $response->getCode());
+
+
+		$client->maxRedirects = 4;
+		$counter = -1;
+		Assert::exception(function() use ($client, $request) {
+			$client->request($request);
+		}, 'Bitbang\Http\RedirectLoopException', 'Maximum redirect count (4) achieved.');
+		Assert::same(4, $counter);
+	}
+
 }

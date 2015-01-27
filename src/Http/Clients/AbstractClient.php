@@ -16,7 +16,7 @@ abstract class AbstractClient extends Http\Sanity implements Http\IClient
 	public $redirectCodes;
 
 	/** @var int  maximum redirects per request */
-	public $maxRedirects = 5;
+	public $maxRedirects = 20;
 
 	/** @var callable|NULL */
 	private $onRequest;
@@ -29,6 +29,7 @@ abstract class AbstractClient extends Http\Sanity implements Http\IClient
 	 * @return Http\Response
 	 *
 	 * @throws Http\BadResponseException
+	 * @throws Http\RedirectLoopException
 	 */
 	public function request(Http\Request $request)
 	{
@@ -46,7 +47,12 @@ abstract class AbstractClient extends Http\Sanity implements Http\IClient
 			$previous = $response->setPrevious($previous);
 
 			$isRedirectCode = $this->redirectCodes === NULL || in_array($response->getCode(), $this->redirectCodes);
-			if ($counter > 0 && $isRedirectCode && $response->hasHeader('Location')) {
+			if ($isRedirectCode && $response->hasHeader('Location')) {
+				if ($counter < 1) {
+					throw new Http\RedirectLoopException("Maximum redirect count ($this->maxRedirects) achieved.");
+				}
+				$counter--;
+
 				/** @todo Use the same HTTP $method for redirection? Set $content to NULL? */
 				$request = new Http\Request(
 					$request->getMethod(),
@@ -54,8 +60,6 @@ abstract class AbstractClient extends Http\Sanity implements Http\IClient
 					$request->getHeaders(),
 					$request->getContent()
 				);
-
-				$counter--;
 				continue;
 			}
 			break;

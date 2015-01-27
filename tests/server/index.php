@@ -30,6 +30,15 @@ if ($requestUri === '/ping') {
 } elseif ($requestUri === '/redirected') {
 	echo 'Redirection finished';
 
+} elseif (preg_match('~^/redirect-loop(?:/(\d+))?$~', $requestUri, $m)) {
+	$count = empty($m[1]) ? 1 : (int) $m[1];
+	if ($count >= $_SERVER['HTTP_X_MAX_LOOP_COUNT']) {
+		header("Location: http://$_SERVER[HTTP_HOST]/redirected");
+	} else {
+		header("Location: http://$_SERVER[HTTP_HOST]/redirect-loop/" . ($count + 1));
+	}
+	echo 'Redirection loop';
+
 } else {
 	header("HTTP/1.1 500");
 	echo "Missing request handler for '$requestUri'.\n";

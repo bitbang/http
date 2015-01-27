@@ -40,6 +40,14 @@ namespace Bitbang\Http {
 	{
 	}
 
+
+	/**
+	 * Redirect loop detected.
+	 */
+	class RedirectLoopException extends BadResponseException
+	{
+	}
+
 }
 
 
