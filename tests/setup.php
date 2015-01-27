@@ -54,5 +54,4 @@ class HttpServer
 }
 
 $config = parse_ini_file(__DIR__ . '/server.ini', TRUE)['listen'];
-$server = new HttpServer;
-$server->start($config['address'], $config['port'], __DIR__ . '/server/index.php');
+(new HttpServer)->start($config['address'], $config['port'], __DIR__ . '/server/index.php');
