@@ -10,7 +10,7 @@ use Bitbang\Http\Clients;
 
 class StreamClientTestCase extends ClientsTestCase
 {
-	protected function getClient()
+	protected function createClient()
 	{
 		return new Clients\StreamClient;
 	}

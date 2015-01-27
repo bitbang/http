@@ -19,12 +19,12 @@ abstract class ClientsTestCase extends Tester\TestCase
 
 
 	/** @return Bitbang\Http\Clients\AbstractClient */
-	abstract protected function getClient();
+	abstract protected function createClient();
 
 
 	public function test200()
 	{
-		$response = $this->getClient()->request(
+		$response = $this->createClient()->request(
 			new Request('GET', $this->baseUrl . '/200')
 		);
 
@@ -35,7 +35,7 @@ abstract class ClientsTestCase extends Tester\TestCase
 
 	public function test404()
 	{
-		$response = $this->getClient()->request(
+		$response = $this->createClient()->request(
 			new Request('GET', $this->baseUrl . '/404')
 		);
 
@@ -46,7 +46,7 @@ abstract class ClientsTestCase extends Tester\TestCase
 
 	public function testReceiveHeaders()
 	{
-		$response = $this->getClient()->request(
+		$response = $this->createClient()->request(
 			new Request('GET', $this->baseUrl . '/receive-headers')
 		);
 
@@ -58,7 +58,7 @@ abstract class ClientsTestCase extends Tester\TestCase
 	{
 		$rand = rand(1, 999);
 
-		$response = $this->getClient()->request(
+		$response = $this->createClient()->request(
 			new Request('GET', $this->baseUrl . '/send-headers', ['X-Foo' => "foo-$rand"])
 		);
 
@@ -68,7 +68,7 @@ abstract class ClientsTestCase extends Tester\TestCase
 
 	public function testRedirectAlways()
 	{
-		$client = $this->getClient();
+		$client = $this->createClient();
 		$client->redirectCodes = NULL;
 
 		$response = $client->request(
@@ -88,7 +88,7 @@ abstract class ClientsTestCase extends Tester\TestCase
 
 	public function testRedirectCodes()
 	{
-		$client = $this->getClient();
+		$client = $this->createClient();
 		$client->redirectCodes = [307];
 
 		$response = $client->request(
@@ -118,7 +118,7 @@ abstract class ClientsTestCase extends Tester\TestCase
 
 	public function testRedirectNever()
 	{
-		$client = $this->getClient();
+		$client = $this->createClient();
 		$client->redirectCodes = [];
 
 		$response = $client->request(
@@ -144,7 +144,7 @@ abstract class ClientsTestCase extends Tester\TestCase
 
 	public function testOnRequestOnResponse()
 	{
-		$client = $this->getClient();
+		$client = $this->createClient();
 
 		$insideRequest = NULL;
 		$client->onRequest(function(Request $request) use (& $insideRequest) {

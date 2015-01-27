@@ -14,7 +14,7 @@ use Bitbang\Http\Clients;
 
 class CurlClientTestCase extends ClientsTestCase
 {
-	protected function getClient()
+	protected function createClient()
 	{
 		return new Clients\CurlClient;
 	}
