@@ -20,7 +20,11 @@ class HttpServer
 	{
 		echo "\n# Starting HTTP server for tests on $address:$port... ";
 
-		if (self::$instance !== NULL) {
+		if (defined('HHVM_VERSION')) {
+			echo "cannot under HHVM, run Tester by Zend PHP\n\n";
+			return;
+
+		} elseif (self::$instance !== NULL) {
 			throw new \LogicException('Server can run only once, but is already running.');
 		}
 		self::$instance = $this;
