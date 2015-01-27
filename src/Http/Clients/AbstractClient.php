@@ -12,14 +12,10 @@ use Bitbang\Http;
  */
 abstract class AbstractClient extends Http\Sanity implements Http\IClient
 {
-	/** @var int[]  will follow Location header on these response codes */
-	public $redirectCodes = [
-		Http\Response::S301_MOVED_PERMANENTLY,
-		Http\Response::S302_FOUND,
-		Http\Response::S307_TEMPORARY_REDIRECT,
-	];
+	/** @var int[]|NULL  follow Location header on these response codes, NULL always, empty array never */
+	public $redirectCodes;
 
-	/** @var int  maximum redirects per request*/
+	/** @var int  maximum redirects per request */
 	public $maxRedirects = 5;
 
 	/** @var callable|NULL */
@@ -49,7 +45,8 @@ abstract class AbstractClient extends Http\Sanity implements Http\IClient
 
 			$previous = $response->setPrevious($previous);
 
-			if ($counter > 0 && in_array($response->getCode(), $this->redirectCodes) && $response->hasHeader('Location')) {
+			$isRedirectCode = $this->redirectCodes === NULL || in_array($response->getCode(), $this->redirectCodes);
+			if ($counter > 0 && $isRedirectCode && $response->hasHeader('Location')) {
 				/** @todo Use the same HTTP $method for redirection? Set $content to NULL? */
 				$request = new Http\Request(
 					$request->getMethod(),

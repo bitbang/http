@@ -18,7 +18,7 @@ abstract class ClientsTestCase extends Tester\TestCase
 	}
 
 
-	/** @return Bitbang\Http\IClient */
+	/** @return Bitbang\Http\Clients\AbstractClient */
 	abstract protected function getClient();
 
 
@@ -66,10 +66,43 @@ abstract class ClientsTestCase extends Tester\TestCase
 	}
 
 
-	public function testRedirection()
+	public function testRedirectAlways()
 	{
-		$response = $this->getClient()->request(
-			new Request('GET', $this->baseUrl . '/redirect')
+		$client = $this->getClient();
+		$client->redirectCodes = NULL;
+
+		$response = $client->request(
+			new Request('GET', $this->baseUrl . '/redirect/201')
+		);
+
+		Assert::same('Redirection finished', $response->getContent());
+		Assert::same(200, $response->getCode());
+
+		$previous = $response->getPrevious();
+		Assert::type('Bitbang\Http\Response', $previous);
+		Assert::same('Redirection made', $previous->getContent());
+		Assert::same(201, $previous->getCode());
+		Assert::null($previous->getPrevious());
+	}
+
+
+	public function testRedirectCodes()
+	{
+		$client = $this->getClient();
+		$client->redirectCodes = [307];
+
+		$response = $client->request(
+			new Request('GET', $this->baseUrl . '/redirect/201')
+		);
+
+		Assert::same('Redirection made', $response->getContent());
+		Assert::same(201, $response->getCode());
+		Assert::true($response->hasHeader('Location'));
+		Assert::null($response->getPrevious());
+
+
+		$response = $client->request(
+			new Request('GET', $this->baseUrl . '/redirect/307')
 		);
 
 		Assert::same('Redirection finished', $response->getContent());
@@ -79,8 +112,33 @@ abstract class ClientsTestCase extends Tester\TestCase
 		Assert::type('Bitbang\Http\Response', $previous);
 		Assert::same('Redirection made', $previous->getContent());
 		Assert::same(307, $previous->getCode());
-
 		Assert::null($previous->getPrevious());
+	}
+
+
+	public function testRedirectNever()
+	{
+		$client = $this->getClient();
+		$client->redirectCodes = [];
+
+		$response = $client->request(
+			new Request('GET', $this->baseUrl . '/redirect/201')
+		);
+
+		Assert::same('Redirection made', $response->getContent());
+		Assert::same(201, $response->getCode());
+		Assert::true($response->hasHeader('Location'));
+		Assert::null($response->getPrevious());
+
+
+		$response = $client->request(
+			new Request('GET', $this->baseUrl . '/redirect/307')
+		);
+
+		Assert::same('Redirection made', $response->getContent());
+		Assert::same(307, $response->getCode());
+		Assert::true($response->hasHeader('Location'));
+		Assert::null($response->getPrevious());
 	}
 
 
