@@ -27,13 +27,11 @@ function getBaseUrl() {
 
 
 function getTempDir() {
-	static $created;
+	static $dir;
 
-	@mkdir($base = __DIR__ . DIRECTORY_SEPARATOR . 'temp'); // @ - may already exist
-	$dir = $base . DIRECTORY_SEPARATOR . getmypid();
-
-	if (!$created) {
-		$created = TRUE;
+	if ($dir === NULL) {
+		@mkdir($base = __DIR__ . DIRECTORY_SEPARATOR . 'temp'); // @ - may already exist
+		$dir = $base . DIRECTORY_SEPARATOR . getmypid();
 		Tester\Helpers::purge($dir);
 		register_shutdown_function(function() use ($dir) {
 			Tester\Helpers::purge($dir);
