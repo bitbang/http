@@ -15,4 +15,6 @@ Assert::true($request->isMethod('FOO'));
 Assert::same('http://', $request->getUrl());
 
 Assert::same($request, $request->addHeader('foo', 'bar'));
+Assert::same($request, $request->addMultiHeader('foo', ['bar']));
 Assert::same($request, $request->setHeader('foo', 'bar'));
+Assert::same($request, $request->setMultiHeader('foo', ['bar']));

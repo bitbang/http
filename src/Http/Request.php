@@ -82,12 +82,35 @@ class Request extends Message
 
 	/**
 	 * @param  string
+	 * @param  string|string[]
+	 * @param  bool
+	 * @return self
+	 */
+	public function addMultiHeader($name, $value, $append = TRUE)
+	{
+		return parent::addMultiHeader($name, $value, $append);
+	}
+
+
+	/**
+	 * @param  string
 	 * @param  string|NULL
 	 * @return self
 	 */
 	public function setHeader($name, $value)
 	{
 		return parent::setHeader($name, $value);
+	}
+
+
+	/**
+	 * @param  string
+	 * @param  string[]
+	 * @return self
+	 */
+	public function setMultiHeader($name, array $value)
+	{
+		return parent::setMultiHeader($name, $value);
 	}
 
 }
