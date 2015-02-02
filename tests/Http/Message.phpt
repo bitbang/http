@@ -19,6 +19,7 @@ test(function() {
 		'a' => 'aaa',
 		'A' => 'AAA',
 		'B' => 'bbb',
+		'c' => NULL,
 	];
 
 	$message = new TestMessage($headers);

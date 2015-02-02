@@ -23,7 +23,11 @@ abstract class Message extends Sanity
 	 */
 	public function __construct(array $headers = [], $content = NULL)
 	{
-		$this->headers = array_change_key_case($headers, CASE_LOWER);
+		foreach ($headers as $name => $value) {
+			if ($value !== NULL) {
+				$this->headers[strtolower($name)] = $value;
+			}
+		}
 		$this->content = $content;
 	}
 
