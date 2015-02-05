@@ -87,13 +87,13 @@ test(function() {
 	Assert::same(['default', 'value'], $message->getMultiHeader('foo', ['default', 'value']));
 	Assert::same('AAAA', $message->getHeader('a'));
 
+	Assert::null($message->getHeader('Added'));
+	Assert::same([], $message->getMultiHeader('Added'));
+
 	$message->addMultiHeader('Added', 'm1');
 	Assert::same(['m1'], $message->getMultiHeader('added'));
 
 	$message->addMultiHeader('Added', 'm2');
-	Assert::same(['m1', 'm2'], $message->getMultiHeader('added'));
-
-	$message->addMultiHeader('Added', 'm3', FALSE);
 	Assert::same(['m1', 'm2'], $message->getMultiHeader('added'));
 
 	$message->addMultiHeader('Added', []);
@@ -102,9 +102,6 @@ test(function() {
 	$message->addMultiHeader('Added', ['foo' => 'm4', 'bar' => 'm5']);
 	Assert::same(['m1', 'm2', 'm4', 'm5'], $message->getMultiHeader('added'));
 	Assert::same('m5', $message->getHeader('added'));
-
-	$message->addMultiHeader('Added2', ['xxx'], FALSE);
-	Assert::same(['xxx'], $message->getMultiHeader('added2'));
 
 	$message->setMultiHeader('Set', ['val']);
 	Assert::same(['val'], $message->getMultiHeader('Set'));

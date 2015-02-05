@@ -34,6 +34,7 @@ abstract class Message extends Sanity
 
 
 	/**
+	 * Does header exist?
 	 * @param  string
 	 * @return bool
 	 */
@@ -44,6 +45,7 @@ abstract class Message extends Sanity
 
 
 	/**
+	 * Does header exist and have more than one value?
 	 * @param  string
 	 * @return bool
 	 */
@@ -82,6 +84,7 @@ abstract class Message extends Sanity
 
 
 	/**
+	 * Set header if not exist.
 	 * @param  string
 	 * @param  string
 	 * @return self
@@ -98,22 +101,19 @@ abstract class Message extends Sanity
 
 
 	/**
+	 * Appends next header value.
 	 * @param  string
 	 * @param  string|string[]
-	 * @param  bool
 	 * @return self
 	 */
-	protected function addMultiHeader($name, $value, $append = TRUE)
+	protected function addMultiHeader($name, $value)
 	{
 		$name = strtolower($name);
-		$value = (array) $value;
-		$exists = array_key_exists($name, $this->headers);
+		$value = array_values((array) $value);
 
-		if ($append || (!$exists && count($value))) {
-			$this->headers[$name] = $exists
-				? array_merge($this->headers[$name], array_values($value))
-				: array_values($value);
-		}
+		$this->headers[$name] = array_key_exists($name, $this->headers)
+			? array_merge($this->headers[$name], $value)
+			: $value;
 
 		return $this;
 	}
@@ -121,7 +121,7 @@ abstract class Message extends Sanity
 
 	/**
 	 * @param  string
-	 * @param  string|NULL
+	 * @param  string|NULL  NULL unset header
 	 * @return self
 	 */
 	protected function setHeader($name, $value)
@@ -139,7 +139,7 @@ abstract class Message extends Sanity
 
 	/**
 	 * @param  string
-	 * @param  string[]
+	 * @param  string[]  empty array unset header
 	 * @return self
 	 */
 	protected function setMultiHeader($name, array $value)
