@@ -23,6 +23,9 @@ if ($requestUri === '/ping') {
 } elseif ($requestUri === '/send-headers') {
 	header('X-Bar: bar-' . $_SERVER['HTTP_X_FOO']);
 
+} elseif ($requestUri === '/receive-multiple-line-header') {
+	header("X-Bar: a\n b\n\tc");
+
 } elseif (preg_match('~^/redirect/([0-9]{3})$~', $requestUri, $m)) {
 	header("Location: http://$_SERVER[HTTP_HOST]/redirected", TRUE, (int) $m[1]);
 	echo 'Redirection made';
