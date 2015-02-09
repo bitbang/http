@@ -17,9 +17,27 @@ use Tester\Assert;
 
 class CurlClientTestCase extends ClientsTestCase
 {
-	protected function createClient()
+	protected function createClient($beforeCurlExec = NULL)
 	{
-		return new Clients\CurlClient;
+		return new Clients\CurlClient($beforeCurlExec);
+	}
+
+
+	public function testClientSetup()
+	{
+		$client = $this->createClient(function($context, $url) use (& $called) {
+			Assert::type('resource', $context);
+			Assert::same('curl', get_resource_type($context));
+			Assert::match('%a%/ping', $url);
+
+			$called = TRUE;
+		});
+
+		$client->request(
+			new Request('GET', $this->baseUrl . '/ping')
+		);
+
+		Assert::true($called);
 	}
 
 

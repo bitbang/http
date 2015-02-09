@@ -13,9 +13,27 @@ use Tester\Assert;
 
 class StreamClientTestCase extends ClientsTestCase
 {
-	protected function createClient()
+	protected function createClient($onContextCreate = NULL)
 	{
-		return new Clients\StreamClient;
+		return new Clients\StreamClient($onContextCreate);
+	}
+
+
+	public function testClientSetup()
+	{
+		$client = $this->createClient(function($context, $url) use (& $called) {
+			Assert::type('resource', $context);
+			Assert::same('stream-context', get_resource_type($context));
+			Assert::match('%a%/ping', $url);
+
+			$called = TRUE;
+		});
+
+		$client->request(
+			new Request('GET', $this->baseUrl . '/ping')
+		);
+
+		Assert::true($called);
 	}
 
 

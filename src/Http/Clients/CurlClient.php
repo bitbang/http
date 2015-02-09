@@ -12,25 +12,25 @@ use Bitbang\Http;
  */
 class CurlClient extends AbstractClient
 {
-	/** @var array|NULL */
-	private $options;
+	/** @var callable|NULL */
+	private $beforeCurlExec;
 
 	/** @var resource */
 	private $curl;
 
 
 	/**
-	 * @param  array  cURL options {@link http://php.net/manual/en/function.curl-setopt.php}
+	 * @param  callable  function(resource $curlHandle, string url)
 	 *
 	 * @throws Http\LogicException
 	 */
-	public function __construct(array $options = NULL)
+	public function __construct($beforeCurlExec = NULL)
 	{
 		if (!extension_loaded('curl')) {
 			throw new Http\LogicException('cURL extension is not loaded.');
 		}
 
-		$this->options = $options;
+		$this->beforeCurlExec = $beforeCurlExec;
 	}
 
 
@@ -56,14 +56,7 @@ class CurlClient extends AbstractClient
 
 		$responseHeaders = [];
 
-		$softOptions = [
-			CURLOPT_CONNECTTIMEOUT => 10,
-			CURLOPT_SSL_VERIFYHOST => 2,
-			CURLOPT_SSL_VERIFYPEER => 1,
-			CURLOPT_CAINFO => realpath(__DIR__ . '/../../ca-chain.crt'),
-		];
-
-		$hardOptions = [
+		$options = [
 			CURLOPT_FOLLOWLOCATION => FALSE,
 			CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
 			CURLOPT_CUSTOMREQUEST => $request->getMethod(),
@@ -73,6 +66,9 @@ class CurlClient extends AbstractClient
 			CURLOPT_RETURNTRANSFER => TRUE,
 			CURLOPT_POSTFIELDS => $request->getContent(),
 			CURLOPT_HEADER => FALSE,
+			CURLOPT_CONNECTTIMEOUT => 10,
+			CURLOPT_SSL_VERIFYHOST => 2,
+			CURLOPT_SSL_VERIFYPEER => 1,
 			CURLOPT_HEADERFUNCTION => function($curl, $line) use (& $responseHeaders, & $last) {
 				if (strncasecmp($line, 'HTTP/', 5) === 0) {
 					/** @todo Set proxy response as Response::setPrevious($proxyResponse)? */
@@ -92,7 +88,7 @@ class CurlClient extends AbstractClient
 		];
 
 		if (defined('CURLOPT_PROTOCOLS')) {  # HHVM issue. Even cURL v7.26.0, constants are missing.
-			$hardOptions[CURLOPT_PROTOCOLS] = CURLPROTO_HTTP | CURLPROTO_HTTPS;
+			$options[CURLOPT_PROTOCOLS] = CURLPROTO_HTTP | CURLPROTO_HTTPS;
 		}
 
 		if (!$this->curl) {
@@ -102,10 +98,12 @@ class CurlClient extends AbstractClient
 			}
 		}
 
-		$result = curl_setopt_array($this->curl, $hardOptions + ($this->options ?: []) + $softOptions);
+		$result = curl_setopt_array($this->curl, $options);
 		if ($result === FALSE) {
 			throw new Http\BadResponseException('Setting cURL options failed: ' . curl_error($this->curl), curl_errno($this->curl));
 		}
+
+		$this->beforeCurlExec && call_user_func($this->beforeCurlExec, $this->curl, $request->getUrl());
 
 		$content = curl_exec($this->curl);
 		if ($content === FALSE) {

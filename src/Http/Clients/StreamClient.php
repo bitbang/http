@@ -12,16 +12,16 @@ use Bitbang\Http;
  */
 class StreamClient extends AbstractClient
 {
-	/** @var array|NULL */
-	private $sslOptions;
+	/** @var callable|NULL */
+	private $onContextCreate;
 
 
 	/**
-	 * @param  array  SSL context options {@link http://php.net/manual/en/context.ssl.php}
+	 * @param  callable  function(resource $context, string $url)
 	 */
-	public function __construct(array $sslOptions = NULL)
+	public function __construct($onContextCreate = NULL)
 	{
-		$this->sslOptions = $sslOptions;
+		$this->onContextCreate = $onContextCreate;
 	}
 
 
@@ -57,7 +57,6 @@ class StreamClient extends AbstractClient
 			],
 			'ssl' => [
 				'verify_peer' => TRUE,
-				'cafile' => realpath(__DIR__ . '/../../ca-chain.crt'),
 				'disable_compression' => TRUE,  # Effective since PHP 5.4.13
 			],
 		];
@@ -66,26 +65,22 @@ class StreamClient extends AbstractClient
 			$options['http']['content'] = $content;
 		}
 
-		if ($this->sslOptions) {
-			$options['ssl'] = $this->sslOptions + $options['ssl'];
-		}
-
 		list($code, $headers, $content) = $this->fileGetContents($request->getUrl(), $options);
 		return new Http\Response($code, $headers, $content);
 	}
 
 
 	/**
-	 * @internal
 	 * @param  string
 	 * @param  array
 	 * @return array
 	 *
 	 * @throws Http\BadResponseException
 	 */
-	protected function fileGetContents($url, array $contextOptions)
+	private function fileGetContents($url, array $contextOptions)
 	{
 		$context = stream_context_create($contextOptions);
+		$this->onContextCreate && call_user_func($this->onContextCreate, $context, $url);
 
 		$e = NULL;
 		set_error_handler(function($severity, $message, $file, $line) use (& $e) {
