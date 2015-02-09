@@ -29,6 +29,7 @@ class StreamClient extends AbstractClient
 	{
 		parent::setupRequest($request);
 		$request->setHeader('Connection', 'close');
+		$request->addHeader('User-Agent', 'Bitbang/' . Http\Library::VERSION . ' (Stream)');
 	}
 
 

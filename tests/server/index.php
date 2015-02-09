@@ -34,7 +34,7 @@ if ($requestUri === '/ping') {
 	echo 'Redirection finished';
 
 } elseif (preg_match('~^/redirect-loop(?:/(\d+))?$~', $requestUri, $m)) {
-	$count = empty($m[1]) ? 1 : (int) $m[1];
+	$count = empty($m[1]) ? 1 : (int)$m[1];
 	if ($count >= $_SERVER['HTTP_X_MAX_LOOP_COUNT']) {
 		header("Location: http://$_SERVER[HTTP_HOST]/redirected");
 	} else {
@@ -42,8 +42,13 @@ if ($requestUri === '/ping') {
 	}
 	echo 'Redirection loop';
 
+} elseif ($requestUri === '/user-agent') {
+	if (isset($_SERVER['HTTP_USER_AGENT'])) {
+		header("X-User-Agent: $_SERVER[HTTP_USER_AGENT]");
+	}
+
 } else {
-	header("HTTP/1.1 500");
+	header('HTTP/1.1 500');
 	echo "Missing request handler for '$requestUri'.\n";
 	exit(255);
 }

@@ -10,6 +10,9 @@ if (!extension_loaded('curl')) {
 }
 
 use Bitbang\Http\Clients;
+use Bitbang\Http\Library;
+use Bitbang\Http\Request;
+use Tester\Assert;
 
 
 class CurlClientTestCase extends ClientsTestCase
@@ -17,6 +20,16 @@ class CurlClientTestCase extends ClientsTestCase
 	protected function createClient()
 	{
 		return new Clients\CurlClient;
+	}
+
+
+	public function testUserAgent()
+	{
+		$response = $this->createClient()->request(
+			new Request('GET', $this->baseUrl . '/user-agent')
+		);
+
+		Assert::same('Bitbang/' . Library::VERSION . ' (cUrl)', $response->getHeader('X-User-Agent'));
 	}
 
 }

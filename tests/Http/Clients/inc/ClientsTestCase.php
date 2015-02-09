@@ -211,4 +211,14 @@ abstract class ClientsTestCase extends Tester\TestCase
 		Assert::same(4, $counter);
 	}
 
+
+	public function testOwnUserAgent()
+	{
+		$response = $this->createClient()->request(
+			new Request('GET', $this->baseUrl . '/user-agent', ['User-Agent' => 'Tested'])
+		);
+
+		Assert::same('Tested', $response->getHeader('X-User-Agent'));
+	}
+
 }

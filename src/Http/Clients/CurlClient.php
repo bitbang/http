@@ -38,6 +38,7 @@ class CurlClient extends AbstractClient
 	{
 		parent::setupRequest($request);
 		$request->addHeader('Connection', 'keep-alive');
+		$request->addHeader('User-Agent', 'Bitbang/' . Http\Library::VERSION . ' (cUrl)');
 	}
 
 
