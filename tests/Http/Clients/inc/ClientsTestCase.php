@@ -22,7 +22,7 @@ abstract class ClientsTestCase extends Tester\TestCase
 	abstract protected function createClient();
 
 
-	public function test200()
+	final public function test200()
 	{
 		$response = $this->createClient()->request(
 			new Request('GET', $this->baseUrl . '/200')
@@ -33,7 +33,7 @@ abstract class ClientsTestCase extends Tester\TestCase
 	}
 
 
-	public function test404()
+	final public function test404()
 	{
 		$response = $this->createClient()->request(
 			new Request('GET', $this->baseUrl . '/404')
@@ -44,7 +44,7 @@ abstract class ClientsTestCase extends Tester\TestCase
 	}
 
 
-	public function testReceiveHeaders()
+	final public function testReceiveHeaders()
 	{
 		$response = $this->createClient()->request(
 			new Request('GET', $this->baseUrl . '/receive-headers')
@@ -54,7 +54,7 @@ abstract class ClientsTestCase extends Tester\TestCase
 	}
 
 
-	public function testSendHeaders()
+	final public function testSendHeaders()
 	{
 		$rand = rand(1, 999);
 
@@ -66,7 +66,7 @@ abstract class ClientsTestCase extends Tester\TestCase
 	}
 
 
-	public function testReceiveMultipleLineHeader()
+	final public function testReceiveMultipleLineHeader()
 	{
 		$response = $this->createClient()->request(
 			new Request('GET', $this->baseUrl . '/receive-multiple-line-header')
@@ -76,7 +76,7 @@ abstract class ClientsTestCase extends Tester\TestCase
 	}
 
 
-	public function testRedirectAlways()
+	final public function testRedirectAlways()
 	{
 		$client = $this->createClient();
 		$client->redirectCodes = NULL;
@@ -96,7 +96,7 @@ abstract class ClientsTestCase extends Tester\TestCase
 	}
 
 
-	public function testRedirectCodes()
+	final public function testRedirectCodes()
 	{
 		$client = $this->createClient();
 		$client->redirectCodes = [307];
@@ -126,7 +126,7 @@ abstract class ClientsTestCase extends Tester\TestCase
 	}
 
 
-	public function testRedirectNever()
+	final public function testRedirectNever()
 	{
 		$client = $this->createClient();
 		$client->redirectCodes = [];
@@ -152,7 +152,7 @@ abstract class ClientsTestCase extends Tester\TestCase
 	}
 
 
-	public function testOnRequestOnResponse()
+	final public function testOnRequestOnResponse()
 	{
 		$client = $this->createClient();
 
@@ -178,7 +178,7 @@ abstract class ClientsTestCase extends Tester\TestCase
 	}
 
 
-	public function testMaxRedirects()
+	final public function testMaxRedirects()
 	{
 		$client = $this->createClient();
 		$client->onRequest(function() use (& $counter) {
@@ -212,7 +212,7 @@ abstract class ClientsTestCase extends Tester\TestCase
 	}
 
 
-	public function testOwnUserAgent()
+	final public function testOwnUserAgent()
 	{
 		$response = $this->createClient()->request(
 			new Request('GET', $this->baseUrl . '/user-agent', ['User-Agent' => 'Tested'])
