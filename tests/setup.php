@@ -1,61 +1,25 @@
 <?php
 
-/**
- * @author  Miloslav Hůla (https://github.com/milo)
- */
+use Bitbang\Http\Tests;
+use Tester\Helpers;
 
-class HttpServer
-{
-	/** @var self */
-	private static $instance;
-
-	/** @var resource */
-	private $proc;
-
-	/** @var resource */
-	private $stdout;
+require __DIR__ . '/server/BackgroundProcess.php';
 
 
-	public function start($address, $port, $index)
-	{
-		echo "\n# Starting HTTP server for tests on $address:$port... ";
+echo "\n";
+if (defined('HHVM_VERSION')) {
+	echo "# HTTP server cannot start under HHVM, run Tester by Zend PHP.\n";
+} else {
+	$config = parse_ini_file(__DIR__ . '/server.ini', TRUE)['listen'];
 
-		if (defined('HHVM_VERSION')) {
-			echo "cannot under HHVM, run Tester by Zend PHP\n\n";
-			return;
+	echo "# Starting HTTP server for tests on $config[address]:$config[port]... ";
+	$server = new Tests\BackgroundProcess;
+	$server->start(Helpers::escapeArg(PHP_BINARY) . " -S $config[address]:$config[port] " . Helpers::escapeArg(__DIR__ . '/server/index.php'));
+	putenv("TESTS_HTTP_LISTEN=$config[address]:$config[port]");
 
-		} elseif (self::$instance !== NULL) {
-			throw new \LogicException('Server can run only once, but is already running.');
-		}
-		self::$instance = $this;
-
-		$this->proc = @proc_open(
-			Tester\Helpers::escapeArg(PHP_BINARY) . " -S $address:$port " . Tester\Helpers::escapeArg($index),
-			[['pipe', 'r'],	['pipe', 'w'], ['pipe', 'w']],
-			$pipes,
-			__DIR__,
-			NULL,
-			['bypass_shell' => TRUE]
-		);
-
-		if ($this->proc === FALSE) {
-			throw new \RuntimeException(error_get_last()['message']);
-		}
-
-		list($stdin, $this->stdout, $stderr) = $pipes;
-		fclose($stdin);
-		fclose($stderr);
-
-		putenv("TESTS_HTTP_LISTEN=$address:$port");
-
-		echo "done\n\n";
-
-		register_shutdown_function(function() {
-			proc_terminate($this->proc);
-		});
-	}
+	register_shutdown_function(function() use ($server) {
+		$server->terminate();
+	});
 
 }
-
-$config = parse_ini_file(__DIR__ . '/server.ini', TRUE)['listen'];
-(new HttpServer)->start($config['address'], $config['port'], __DIR__ . '/server/index.php');
+echo "\n";
