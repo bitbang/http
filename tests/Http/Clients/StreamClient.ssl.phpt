@@ -15,7 +15,10 @@ if (!extension_loaded('openssl')) {
 # Untrusted SSL CA
 test(function() {
 	$e = Assert::exception(function() {
-		$client = new Clients\StreamClient;
+		$client = new Clients\StreamClient(function($context) {
+			stream_context_set_option($context, 'ssl', 'ciphers', 'ALL');  # testing SSL wrapper limitation
+		});
+
 		$client->request(
 			new Request('GET', getBaseSslUrl())
 		);
@@ -40,6 +43,7 @@ test(function() {
 # Trusted SSL CA
 test(function() {
 	$client = new Clients\StreamClient(function($context) {
+		stream_context_set_option($context, 'ssl', 'ciphers', 'ALL');  # testing SSL wrapper limitation
 		stream_context_set_option($context, 'ssl', 'cafile', __DIR__ . '/../../server/cert/ca.pem');
 	});
 
