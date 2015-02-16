@@ -26,6 +26,15 @@ function getBaseUrl() {
 }
 
 
+function getBaseSslUrl() {
+	$listen = getenv('TESTS_HTTPS_LISTEN');
+	if ($listen === FALSE) {
+		Tester\Environment::skip("The 'TESTS_HTTPS_LISTEN' environment variable is missing. Do you use '--setup tests/setup.php' option?");
+	}
+	return "https://$listen";
+}
+
+
 function getTempDir() {
 	static $dir;
 
