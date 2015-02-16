@@ -16,7 +16,8 @@
 		"nette/tester": "~1.3.0"
 	},
 	"suggest": {
-		"ext-curl": "Allows you to use Bitbang\\Http\\CurlClient"
+		"ext-curl": "Allows you to use Bitbang\\Http\\CurlClient",
+		"kdyby/curl-ca-bundle": "Auto-updated trusted CA Certs bundle. Handy on Windows."
 	},
 	"autoload": {
 		"classmap": ["src/Http/"]
