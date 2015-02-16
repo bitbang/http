@@ -19,19 +19,26 @@ class BackgroundProcess
 	/** @var resource */
 	private $stdout;
 
+	/** @var resource */
+	private $stderr;
+
 
 	/**
 	 * @param  string  command to run on background
-	 * @param  int
+	 * @param  string
 	 * @param  string
 	 */
-	public function start($command)
+	public function start($command, $stdout = NULL, $stderr = NULL)
 	{
 		self::$instances[] = $this;
 
 		$this->proc = @proc_open(
 			$command,
-			[['pipe', 'r'],	['pipe', 'w'], ['pipe', 'w']],
+			[
+				['pipe', 'r'],
+				$stdout === NULL ? ['pipe', 'w'] : ['file', $stdout, 'wb'],
+				$stderr === NULL ? ['pipe', 'w'] : ['file', $stderr, 'wb'],
+			],
 			$pipes,
 			__DIR__,
 			NULL,
@@ -44,9 +51,9 @@ class BackgroundProcess
 
 		/* @todo: Check that process didn't hang up. */
 
-		list($stdin, $this->stdout, $stderr) = $pipes;
-		fclose($stdin);
-		fclose($stderr);
+		fclose($pipes[0]);
+		isset($pipes[1]) && $this->stdout = $pipes[1];
+		isset($pipes[2]) && $this->stderr = $pipes[2];
 	}
 
 

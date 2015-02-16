@@ -49,6 +49,7 @@ if ($requestUri === '/ping') {
 
 } else {
 	header('HTTP/1.1 500');
-	echo "Missing request handler for '$requestUri'.\n";
+	echo $message = "Missing request handler for '$requestUri' . \n";
+	file_put_contents('php://stderr', $message);
 	exit(255);
 }

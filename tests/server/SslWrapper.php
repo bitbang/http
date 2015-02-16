@@ -73,6 +73,7 @@ class SslWrapper
 		stream_set_blocking($resource, 1);
 		$res = @stream_socket_enable_crypto($resource, TRUE, STREAM_CRYPTO_METHOD_TLS_SERVER);  // @ - e.g. when using HTTP instead of HTTPS
 		if ($res === FALSE) {
+			file_put_contents('php://stderr', error_get_last()['message'] . "\n");
 			@stream_socket_shutdown($resource, STREAM_SHUT_RDWR);
 			@fclose($resource);
 			return;
