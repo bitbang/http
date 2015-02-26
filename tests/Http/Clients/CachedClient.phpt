@@ -54,7 +54,7 @@ class MockCache implements Http\ICache
 }
 
 
-class TestedCachedClient extends Http\CachedClient
+class TestedCachedClient extends Http\Clients\CachedClient
 {
 	public function isCacheable(Http\Response $response) { return parent::isCacheable($response); }
 }
@@ -265,7 +265,7 @@ class CachedClientTestCase extends Tester\TestCase
 
 	public function testForbidRecheckEnabled()
 	{
-		$this->client = new Http\CachedClient(new MockCache, $this->innerClient, TRUE);
+		$this->client = new Http\Clients\CachedClient(new MockCache, $this->innerClient, TRUE);
 
 		$request = new Http\Request('', '', [], 'enabled');
 

@@ -1,6 +1,8 @@
 <?php
 
-namespace Bitbang\Http;
+namespace Bitbang\Http\Clients;
+
+use Bitbang\Http;
 
 
 /**
@@ -8,12 +10,12 @@ namespace Bitbang\Http;
  *
  * @author  Miloslav Hůla (https://github.com/milo)
  */
-class CachedClient extends Sanity implements IClient
+class CachedClient extends Http\Sanity implements Http\IClient
 {
-	/** @var ICache|NULL */
+	/** @var Http\ICache|NULL */
 	private $cache;
 
-	/** @var IClient */
+	/** @var Http\IClient */
 	private $client;
 
 	/** @var bool */
@@ -24,11 +26,11 @@ class CachedClient extends Sanity implements IClient
 
 
 	/**
-	 * @param ICache
-	 * @param IClient
+	 * @param Http\ICache
+	 * @param Http\IClient
 	 * @param bool  forbid checking for new data if present in cache; more or less development purpose only
 	 */
-	public function __construct(ICache $cache, IClient $client, $forbidRecheck = FALSE)
+	public function __construct(Http\ICache $cache, Http\IClient $client, $forbidRecheck = FALSE)
 	{
 		$this->cache = $cache;
 		$this->client = $client;
@@ -37,7 +39,7 @@ class CachedClient extends Sanity implements IClient
 
 
 	/**
-	 * @return IClient
+	 * @return Http\IClient
 	 */
 	public function getInnerClient()
 	{
@@ -46,11 +48,11 @@ class CachedClient extends Sanity implements IClient
 
 
 	/**
-	 * @return Response
+	 * @return Http\Response
 	 *
-	 * @throws BadResponseException
+	 * @throws Http\BadResponseException
 	 */
-	public function request(Request $request)
+	public function request(Http\Request $request)
 	{
 		$request = clone $request;
 
@@ -71,7 +73,7 @@ class CachedClient extends Sanity implements IClient
 				return $cached;
 			}
 
-			/** @var $cached Response */
+			/** @var $cached Http\Response */
 			if ($cached->hasHeader('Last-Modified')) {
 				$request->addHeader('If-Modified-Since', $cached->getHeader('Last-Modified'));
 			} elseif ($cached->hasHeader('ETag')) {
@@ -85,7 +87,7 @@ class CachedClient extends Sanity implements IClient
 			$this->cache->save($cacheKey, clone $response);
 		}
 
-		if (isset($cached) && $response->getCode() === Response::S304_NOT_MODIFIED) {
+		if (isset($cached) && $response->getCode() === Http\Response::S304_NOT_MODIFIED) {
 			$cached = clone $cached;
 
 			/** @todo Should be responses somehow combined into one? */
@@ -124,7 +126,7 @@ class CachedClient extends Sanity implements IClient
 	/**
 	 * @return bool
 	 */
-	protected function isCacheable(Response $response)
+	protected function isCacheable(Http\Response $response)
 	{
 		/** @todo Do it properly. Vary:, Pragma:, TTL...  */
 		if (!$response->isCode(200)) {
