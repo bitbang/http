@@ -240,8 +240,10 @@ class CachedClientTestCase extends Tester\TestCase
 	}
 
 
-	public function testForbidRecheckDisabled()
+	public function testGreedyCachingDisabled()
 	{
+		Assert::false($this->client->getGreedyCaching());
+
 		$request = new Http\Request('', '', [], 'disabled');
 
 		$response = $this->client->request($request);
@@ -263,9 +265,10 @@ class CachedClientTestCase extends Tester\TestCase
 	}
 
 
-	public function testForbidRecheckEnabled()
+	public function testGreedyCachingEnabled()
 	{
-		$this->client = new Http\Clients\CachedClient(new MockCache, $this->innerClient, TRUE);
+		$this->client->setGreedyCaching(TRUE);
+		Assert::true($this->client->getGreedyCaching());
 
 		$request = new Http\Request('', '', [], 'enabled');
 
@@ -283,6 +286,38 @@ class CachedClientTestCase extends Tester\TestCase
 		Assert::same('inner-200-enabled', $response->getContent());
 		Assert::null($response->getPrevious());
 		Assert::same(1, $this->innerClient->requestCount);
+	}
+
+
+	/**
+	 * Caching normally non-cacheable responses in greedy caching mode.
+	 */
+	public function testGreedyCachingEveryResponse()
+	{
+		$this->client->setGreedyCaching(TRUE);
+		Assert::true($this->client->getGreedyCaching());
+
+		$response = new Http\Response(404, [], '');
+		Assert::false($this->client->isCacheable($response));
+
+		$this->innerClient->requestCallback = function (Http\Request $request) use ($response) {
+			return $response;
+		};
+
+		$response = $this->client->request(new Http\Request('GET', ''));
+		Assert::same(404, $response->getCode());
+		Assert::null($response->getPrevious());
+		Assert::same(1, $this->innerClient->requestCount);
+
+		$response = $this->client->request(new Http\Request('GET', ''));
+		Assert::same(404, $response->getCode());
+		Assert::null($response->getPrevious());
+		Assert::same(1, $this->innerClient->requestCount);
+
+		$response = $this->client->request(new Http\Request('GET', 'next'));
+		Assert::same(404, $response->getCode());
+		Assert::null($response->getPrevious());
+		Assert::same(2, $this->innerClient->requestCount);
 	}
 
 

@@ -12,29 +12,27 @@ use Bitbang\Http;
  */
 class CachedClient extends Http\Sanity implements Http\IClient
 {
-	/** @var Http\ICache|NULL */
+	/** @var Http\ICache */
 	private $cache;
 
 	/** @var Http\IClient */
 	private $client;
 
 	/** @var bool */
-	private $forbidRecheck;
+	private $greedyCaching = FALSE;
 
 	/** @var callable|NULL */
 	private $onResponse;
 
 
 	/**
-	 * @param Http\ICache
-	 * @param Http\IClient
-	 * @param bool  forbid checking for new data if present in cache; more or less development purpose only
+	 * @param  Http\ICache
+	 * @param  Http\IClient
 	 */
-	public function __construct(Http\ICache $cache, Http\IClient $client, $forbidRecheck = FALSE)
+	public function __construct(Http\ICache $cache, Http\IClient $client)
 	{
 		$this->cache = $cache;
 		$this->client = $client;
-		$this->forbidRecheck = (bool) $forbidRecheck;
 	}
 
 
@@ -44,6 +42,26 @@ class CachedClient extends Http\Sanity implements Http\IClient
 	public function getInnerClient()
 	{
 		return $this->client;
+	}
+
+
+	/**
+	 * @param  bool  if TRUE, every response will be cached and never re-checked on server
+	 * @return self
+	 */
+	public function setGreedyCaching($greedy)
+	{
+		$this->greedyCaching = (bool) $greedy;
+		return $this;
+	}
+
+
+	/**
+	 * @return bool
+	 */
+	public function getGreedyCaching()
+	{
+		return $this->greedyCaching;
 	}
 
 
@@ -67,7 +85,7 @@ class CachedClient extends Http\Sanity implements Http\IClient
 		]);
 
 		if ($cached = $this->cache->load($cacheKey)) {
-			if ($this->forbidRecheck) {
+			if ($this->greedyCaching) {
 				$cached = clone $cached;
 				$this->onResponse && call_user_func($this->onResponse, $cached);
 				return $cached;
@@ -83,7 +101,7 @@ class CachedClient extends Http\Sanity implements Http\IClient
 
 		$response = $this->client->request($request);
 
-		if ($this->isCacheable($response)) {
+		if ($this->isCacheable($response) || $this->greedyCaching) {
 			$this->cache->save($cacheKey, clone $response);
 		}
 
