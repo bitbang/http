@@ -221,4 +221,28 @@ abstract class ClientsTestCase extends Tester\TestCase
 		Assert::same('Tested', $response->getHeader('X-User-Agent'));
 	}
 
+
+	final public function testHttpMethod()
+	{
+		$response = $this->createClient()->request(
+			new Request('POST', $this->baseUrl . '/method')
+		);
+		Assert::same('method-POST', $response->getContent());
+
+		$response = $this->createClient()->request(
+			new Request('PUT', $this->baseUrl . '/method')
+		);
+		Assert::same('method-PUT', $response->getContent());
+
+		$response = $this->createClient()->request(
+			new Request('DELETE', $this->baseUrl . '/method')
+		);
+		Assert::same('method-DELETE', $response->getContent());
+
+		$response = $this->createClient()->request(
+			new Request('HEAD', $this->baseUrl . '/method')
+		);
+		Assert::same('', $response->getContent());
+	}
+
 }

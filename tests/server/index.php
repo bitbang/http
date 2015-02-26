@@ -47,6 +47,9 @@ if ($requestUri === '/ping') {
 		header("X-User-Agent: $_SERVER[HTTP_USER_AGENT]");
 	}
 
+} elseif ($requestUri === '/method') {
+	echo "method-$_SERVER[REQUEST_METHOD]";
+
 } else {
 	header('HTTP/1.1 500');
 	echo $message = "Missing request handler for '$requestUri' . \n";
