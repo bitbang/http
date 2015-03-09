@@ -70,12 +70,12 @@ class StreamClient extends AbstractClient
 			],
 		];
 
-		if (($content = $request->getContent()) !== NULL) {
-			$options['http']['content'] = $content;
+		if (($body = $request->getBody()) !== NULL) {
+			$options['http']['content'] = $body;
 		}
 
-		list($code, $headers, $content) = $this->fileGetContents($request->getUrl(), $options);
-		return new Http\Response($code, $headers, $content);
+		list($code, $headers, $body) = $this->fileGetContents($request->getUrl(), $options);
+		return new Http\Response($code, $headers, $body);
 	}
 
 

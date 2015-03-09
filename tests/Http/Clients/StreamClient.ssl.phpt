@@ -52,5 +52,5 @@ test(function() {
 	);
 
 	Assert::type('Bitbang\\Http\\Response', $response);
-	Assert::same('pong', $response->getContent());
+	Assert::same('pong', $response->getBody());
 });

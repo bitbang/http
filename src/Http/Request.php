@@ -33,11 +33,11 @@ class Request extends Message
 	 * @param  array
 	 * @param  string|NULL
 	 */
-	public function __construct($method, $url, array $headers = [], $content = NULL)
+	public function __construct($method, $url, array $headers = [], $body = NULL)
 	{
 		$this->method = $method;
 		$this->url = $url;
-		parent::__construct($headers, $content);
+		parent::__construct($headers, $body);
 	}
 
 

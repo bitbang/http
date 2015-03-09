@@ -77,8 +77,8 @@ class CachedClientTestCase extends Tester\TestCase
 
 		$this->innerClient->requestCallback = function (Http\Request $request) {
 			return $request->hasHeader('If-None-Match')
-				? new Http\Response(304, [], "inner-304-{$request->getContent()}")
-				: new Http\Response(200, ['ETag' => '"inner"'], "inner-200-{$request->getContent()}");
+				? new Http\Response(304, [], "inner-304-{$request->getBody()}")
+				: new Http\Response(200, ['ETag' => '"inner"'], "inner-200-{$request->getBody()}");
 		};
 	}
 
@@ -115,15 +115,15 @@ class CachedClientTestCase extends Tester\TestCase
 			Assert::false($request->hasHeader('ETag'));
 			Assert::false($request->hasHeader('If-Modified-Since'));
 
-			return new Http\Response(200, [], "response-{$request->getContent()}");
+			return new Http\Response(200, [], "response-{$request->getBody()}");
 		};
 
 		$response = $this->client->request(new Http\Request('', '', [], '1'));
-		Assert::same('response-1', $response->getContent());
+		Assert::same('response-1', $response->getBody());
 		Assert::same(1, $this->innerClient->requestCount);
 
 		$response = $this->client->request(new Http\Request('', '', [], '2'));
-		Assert::same('response-2', $response->getContent());
+		Assert::same('response-2', $response->getBody());
 		Assert::same(2, $this->innerClient->requestCount);
 	}
 
@@ -134,11 +134,11 @@ class CachedClientTestCase extends Tester\TestCase
 			Assert::false($request->hasHeader('If-None-Match'));
 			Assert::false($request->hasHeader('If-Modified-Since'));
 
-			return new Http\Response(200, ['ETag' => 'e-tag'], "response-{$request->getContent()}");
+			return new Http\Response(200, ['ETag' => 'e-tag'], "response-{$request->getBody()}");
 		};
 
 		$response = $this->client->request(new Http\Request('', '', [], '1'));
-		Assert::same('response-1', $response->getContent());
+		Assert::same('response-1', $response->getBody());
 		Assert::same(1, $this->innerClient->requestCount);
 
 
@@ -146,10 +146,10 @@ class CachedClientTestCase extends Tester\TestCase
 			Assert::same('e-tag', $request->getHeader('If-None-Match'));
 			Assert::false($request->hasHeader('If-Modified-Since'));
 
-			return new Http\Response(304, [], "response-{$request->getContent()}");
+			return new Http\Response(304, [], "response-{$request->getBody()}");
 		};
 		$response = $this->client->request(new Http\Request('', '', [], '2'));
-		Assert::same('response-1', $response->getContent());
+		Assert::same('response-1', $response->getBody());
 		Assert::type('Bitbang\Http\Response', $response->getPrevious());
 		Assert::same(304, $response->getPrevious()->getCode());
 		Assert::same(2, $this->innerClient->requestCount);
@@ -162,11 +162,11 @@ class CachedClientTestCase extends Tester\TestCase
 			Assert::false($request->hasHeader('If-None-Match'));
 			Assert::false($request->hasHeader('If-Modified-Since'));
 
-			return new Http\Response(200, ['Last-Modified' => 'today'], "response-{$request->getContent()}");
+			return new Http\Response(200, ['Last-Modified' => 'today'], "response-{$request->getBody()}");
 		};
 
 		$response = $this->client->request(new Http\Request('', '', [], '1'));
-		Assert::same('response-1', $response->getContent());
+		Assert::same('response-1', $response->getBody());
 		Assert::same(1, $this->innerClient->requestCount);
 
 
@@ -174,11 +174,11 @@ class CachedClientTestCase extends Tester\TestCase
 			Assert::false($request->hasHeader('ETag'));
 			Assert::same('today', $request->getHeader('If-Modified-Since'));
 
-			return new Http\Response(304, [], "response-{$request->getContent()}");
+			return new Http\Response(304, [], "response-{$request->getBody()}");
 		};
 
 		$response = $this->client->request(new Http\Request('', '', [], '2'));
-		Assert::same('response-1', $response->getContent());
+		Assert::same('response-1', $response->getBody());
 		Assert::type('Bitbang\Http\Response', $response->getPrevious());
 		Assert::same(304, $response->getPrevious()->getCode());
 		Assert::same(2, $this->innerClient->requestCount);
@@ -191,11 +191,11 @@ class CachedClientTestCase extends Tester\TestCase
 			Assert::false($request->hasHeader('If-None-Match'));
 			Assert::false($request->hasHeader('If-Modified-Since'));
 
-			return new Http\Response(200, ['Last-Modified' => 'today', 'ETag' => 'e-tag'], "response-{$request->getContent()}");
+			return new Http\Response(200, ['Last-Modified' => 'today', 'ETag' => 'e-tag'], "response-{$request->getBody()}");
 		};
 
 		$response = $this->client->request(new Http\Request('', '', [], '1'));
-		Assert::same('response-1', $response->getContent());
+		Assert::same('response-1', $response->getBody());
 		Assert::same(1, $this->innerClient->requestCount);
 
 
@@ -203,11 +203,11 @@ class CachedClientTestCase extends Tester\TestCase
 			Assert::false($request->hasHeader('ETag'));
 			Assert::same('today', $request->getHeader('If-Modified-Since'));
 
-			return new Http\Response(304, [], "response-{$request->getContent()}");
+			return new Http\Response(304, [], "response-{$request->getBody()}");
 		};
 
 		$response = $this->client->request(new Http\Request('', '', [], '2'));
-		Assert::same('response-1', $response->getContent());
+		Assert::same('response-1', $response->getBody());
 		Assert::type('Bitbang\Http\Response', $response->getPrevious());
 		Assert::same(304, $response->getPrevious()->getCode());
 		Assert::same(2, $this->innerClient->requestCount);
@@ -220,22 +220,22 @@ class CachedClientTestCase extends Tester\TestCase
 
 		# Empty cache
 		$response = $this->client->request($request);
-		Assert::same('inner-200-same', $response->getContent());
+		Assert::same('inner-200-same', $response->getBody());
 		Assert::null($response->getPrevious());
 		Assert::same(1, $this->innerClient->requestCount);
 
 		# From cache
 		$response = $this->client->request($request);
-		Assert::same('inner-200-same', $response->getContent());
+		Assert::same('inner-200-same', $response->getBody());
 		Assert::type('Bitbang\Http\Response', $response->getPrevious());
-		Assert::same('inner-304-same', $response->getPrevious()->getContent());
+		Assert::same('inner-304-same', $response->getPrevious()->getBody());
 		Assert::same(2, $this->innerClient->requestCount);
 
 		# Again
 		$response = $this->client->request($request);
-		Assert::same('inner-200-same', $response->getContent());
+		Assert::same('inner-200-same', $response->getBody());
 		Assert::type('Bitbang\Http\Response', $response->getPrevious());
-		Assert::same('inner-304-same', $response->getPrevious()->getContent());
+		Assert::same('inner-304-same', $response->getPrevious()->getBody());
 		Assert::same(3, $this->innerClient->requestCount);
 	}
 
@@ -247,20 +247,20 @@ class CachedClientTestCase extends Tester\TestCase
 		$request = new Http\Request('', '', [], 'disabled');
 
 		$response = $this->client->request($request);
-		Assert::same('inner-200-disabled', $response->getContent());
+		Assert::same('inner-200-disabled', $response->getBody());
 		Assert::null($response->getPrevious());
 		Assert::same(1, $this->innerClient->requestCount);
 
 		$response = $this->client->request($request);
-		Assert::same('inner-200-disabled', $response->getContent());
+		Assert::same('inner-200-disabled', $response->getBody());
 		Assert::type('Bitbang\Http\Response', $response->getPrevious());
-		Assert::same('inner-304-disabled', $response->getPrevious()->getContent());
+		Assert::same('inner-304-disabled', $response->getPrevious()->getBody());
 		Assert::same(2, $this->innerClient->requestCount);
 
 		$response = $this->client->request($request);
-		Assert::same('inner-200-disabled', $response->getContent());
+		Assert::same('inner-200-disabled', $response->getBody());
 		Assert::type('Bitbang\Http\Response', $response->getPrevious());
-		Assert::same('inner-304-disabled', $response->getPrevious()->getContent());
+		Assert::same('inner-304-disabled', $response->getPrevious()->getBody());
 		Assert::same(3, $this->innerClient->requestCount);
 	}
 
@@ -273,17 +273,17 @@ class CachedClientTestCase extends Tester\TestCase
 		$request = new Http\Request('', '', [], 'enabled');
 
 		$response = $this->client->request($request);
-		Assert::same('inner-200-enabled', $response->getContent());
+		Assert::same('inner-200-enabled', $response->getBody());
 		Assert::null($response->getPrevious());
 		Assert::same(1, $this->innerClient->requestCount);
 
 		$response = $this->client->request($request);
-		Assert::same('inner-200-enabled', $response->getContent());
+		Assert::same('inner-200-enabled', $response->getBody());
 		Assert::null($response->getPrevious());
 		Assert::same(1, $this->innerClient->requestCount);
 
 		$response = $this->client->request($request);
-		Assert::same('inner-200-enabled', $response->getContent());
+		Assert::same('inner-200-enabled', $response->getBody());
 		Assert::null($response->getPrevious());
 		Assert::same(1, $this->innerClient->requestCount);
 	}

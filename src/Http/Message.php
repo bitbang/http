@@ -14,14 +14,14 @@ abstract class Message extends Sanity
 	private $headers = [];
 
 	/** @var string|NULL */
-	private $content;
+	private $body;
 
 
 	/**
 	 * @param  array
 	 * @param  string|NULL
 	 */
-	public function __construct(array $headers = [], $content = NULL)
+	public function __construct(array $headers = [], $body = NULL)
 	{
 		foreach ($headers as $name => $values) {
 			$values = (array) $values;
@@ -29,7 +29,7 @@ abstract class Message extends Sanity
 				$this->headers[strtolower($name)] = array_values($values);
 			}
 		}
-		$this->content = $content;
+		$this->body = $body;
 	}
 
 
@@ -176,9 +176,9 @@ abstract class Message extends Sanity
 	/**
 	 * @return string|NULL
 	 */
-	public function getContent()
+	public function getBody()
 	{
-		return $this->content;
+		return $this->body;
 	}
 
 }

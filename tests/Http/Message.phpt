@@ -116,8 +116,8 @@ test(function() {
 
 # Content
 test(function() {
-	Assert::same(NULL, (new TestMessage([], NULL))->getContent());
-	Assert::same('', (new TestMessage([], ''))->getContent());
+	Assert::same(NULL, (new TestMessage([], NULL))->getBody());
+	Assert::same('', (new TestMessage([], ''))->getBody());
 });
 
 

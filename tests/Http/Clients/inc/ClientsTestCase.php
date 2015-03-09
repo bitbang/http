@@ -28,7 +28,7 @@ abstract class ClientsTestCase extends Tester\TestCase
 			new Request('GET', $this->baseUrl . '/200')
 		);
 
-		Assert::same('The 200 response.', $response->getContent());
+		Assert::same('The 200 response.', $response->getBody());
 		Assert::same(200, $response->getCode());
 	}
 
@@ -39,7 +39,7 @@ abstract class ClientsTestCase extends Tester\TestCase
 			new Request('GET', $this->baseUrl . '/404')
 		);
 
-		Assert::same('The 404 response.', $response->getContent());
+		Assert::same('The 404 response.', $response->getBody());
 		Assert::same(404, $response->getCode());
 	}
 
@@ -85,12 +85,12 @@ abstract class ClientsTestCase extends Tester\TestCase
 			new Request('GET', $this->baseUrl . '/redirect/201')
 		);
 
-		Assert::same('Redirection finished', $response->getContent());
+		Assert::same('Redirection finished', $response->getBody());
 		Assert::same(200, $response->getCode());
 
 		$previous = $response->getPrevious();
 		Assert::type('Bitbang\Http\Response', $previous);
-		Assert::same('Redirection made', $previous->getContent());
+		Assert::same('Redirection made', $previous->getBody());
 		Assert::same(201, $previous->getCode());
 		Assert::null($previous->getPrevious());
 	}
@@ -105,7 +105,7 @@ abstract class ClientsTestCase extends Tester\TestCase
 			new Request('GET', $this->baseUrl . '/redirect/201')
 		);
 
-		Assert::same('Redirection made', $response->getContent());
+		Assert::same('Redirection made', $response->getBody());
 		Assert::same(201, $response->getCode());
 		Assert::true($response->hasHeader('Location'));
 		Assert::null($response->getPrevious());
@@ -115,12 +115,12 @@ abstract class ClientsTestCase extends Tester\TestCase
 			new Request('GET', $this->baseUrl . '/redirect/307')
 		);
 
-		Assert::same('Redirection finished', $response->getContent());
+		Assert::same('Redirection finished', $response->getBody());
 		Assert::same(200, $response->getCode());
 
 		$previous = $response->getPrevious();
 		Assert::type('Bitbang\Http\Response', $previous);
-		Assert::same('Redirection made', $previous->getContent());
+		Assert::same('Redirection made', $previous->getBody());
 		Assert::same(307, $previous->getCode());
 		Assert::null($previous->getPrevious());
 	}
@@ -135,7 +135,7 @@ abstract class ClientsTestCase extends Tester\TestCase
 			new Request('GET', $this->baseUrl . '/redirect/201')
 		);
 
-		Assert::same('Redirection made', $response->getContent());
+		Assert::same('Redirection made', $response->getBody());
 		Assert::same(201, $response->getCode());
 		Assert::true($response->hasHeader('Location'));
 		Assert::null($response->getPrevious());
@@ -145,7 +145,7 @@ abstract class ClientsTestCase extends Tester\TestCase
 			new Request('GET', $this->baseUrl . '/redirect/307')
 		);
 
-		Assert::same('Redirection made', $response->getContent());
+		Assert::same('Redirection made', $response->getBody());
 		Assert::same(307, $response->getCode());
 		Assert::true($response->hasHeader('Location'));
 		Assert::null($response->getPrevious());
@@ -191,7 +191,7 @@ abstract class ClientsTestCase extends Tester\TestCase
 		$counter = -1;
 		$response = $client->request(clone $request);
 		Assert::same(5, $counter);
-		Assert::same('Redirection finished', $response->getContent());
+		Assert::same('Redirection finished', $response->getBody());
 		Assert::same(200, $response->getCode());
 
 
@@ -199,7 +199,7 @@ abstract class ClientsTestCase extends Tester\TestCase
 		$counter = -1;
 		$response = $client->request(clone $request);
 		Assert::same(5, $counter);
-		Assert::same('Redirection finished', $response->getContent());
+		Assert::same('Redirection finished', $response->getBody());
 		Assert::same(200, $response->getCode());
 
 
@@ -227,22 +227,22 @@ abstract class ClientsTestCase extends Tester\TestCase
 		$response = $this->createClient()->request(
 			new Request('POST', $this->baseUrl . '/method')
 		);
-		Assert::same('method-POST', $response->getContent());
+		Assert::same('method-POST', $response->getBody());
 
 		$response = $this->createClient()->request(
 			new Request('PUT', $this->baseUrl . '/method')
 		);
-		Assert::same('method-PUT', $response->getContent());
+		Assert::same('method-PUT', $response->getBody());
 
 		$response = $this->createClient()->request(
 			new Request('DELETE', $this->baseUrl . '/method')
 		);
-		Assert::same('method-DELETE', $response->getContent());
+		Assert::same('method-DELETE', $response->getBody());
 
 		$response = $this->createClient()->request(
 			new Request('HEAD', $this->baseUrl . '/method')
 		);
-		Assert::same('', $response->getContent());
+		Assert::same('', $response->getBody());
 	}
 
 }

@@ -64,7 +64,7 @@ class CurlClient extends AbstractClient
 			CURLOPT_URL => $request->getUrl(),
 			CURLOPT_HTTPHEADER => $headers,
 			CURLOPT_RETURNTRANSFER => TRUE,
-			CURLOPT_POSTFIELDS => $request->getContent(),
+			CURLOPT_POSTFIELDS => $request->getBody(),
 			CURLOPT_HEADER => FALSE,
 			CURLOPT_CONNECTTIMEOUT => 10,
 			CURLOPT_SSL_VERIFYHOST => 2,
@@ -105,8 +105,8 @@ class CurlClient extends AbstractClient
 
 		$this->beforeCurlExec && call_user_func($this->beforeCurlExec, $this->curl, $request->getUrl());
 
-		$content = curl_exec($this->curl);
-		if ($content === FALSE) {
+		$body = curl_exec($this->curl);
+		if ($body === FALSE) {
 			throw new Http\BadResponseException(curl_error($this->curl), curl_errno($this->curl));
 		}
 
@@ -115,7 +115,7 @@ class CurlClient extends AbstractClient
 			throw new Http\BadResponseException('HTTP status code is missing: ' . curl_error($this->curl), curl_errno($this->curl));
 		}
 
-		return new Http\Response($code, $responseHeaders, $content);
+		return new Http\Response($code, $responseHeaders, $body);
 	}
 
 }

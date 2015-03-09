@@ -35,10 +35,10 @@ class Response extends Message
 	 * @param  array
 	 * @param  string
 	 */
-	public function __construct($code, array $headers, $content)
+	public function __construct($code, array $headers, $body)
 	{
 		$this->code = (int) $code;
-		parent::__construct($headers, $content);
+		parent::__construct($headers, $body);
 	}
 
 
