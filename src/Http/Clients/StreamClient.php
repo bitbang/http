@@ -12,16 +12,23 @@ use Bitbang\Http;
  */
 class StreamClient extends AbstractClient
 {
+	/** @var array */
+	private $options = [];
+
 	/** @var callable|NULL */
 	private $onContextCreate;
 
 
 	/**
-	 * @param  callable  function(resource $context, string $url)
+	 * @param  array|callable function(resource $context, string $url)
 	 */
-	public function __construct($onContextCreate = NULL)
+	public function __construct($optionsOrCallback = NULL)
 	{
-		$this->onContextCreate = $onContextCreate;
+		if (is_array($optionsOrCallback) && array_keys($optionsOrCallback) !== [0, 1]) {
+			$this->options = $optionsOrCallback;
+		} else {
+			$this->onContextCreate = $optionsOrCallback;
+		}
 	}
 
 
@@ -73,6 +80,8 @@ class StreamClient extends AbstractClient
 		if (($body = $request->getBody()) !== NULL) {
 			$options['http']['content'] = $body;
 		}
+
+		$options = array_replace_recursive($options, $this->options);
 
 		list($code, $headers, $body) = $this->fileGetContents($request->getUrl(), $options);
 		return new Http\Response($code, $headers, $body);

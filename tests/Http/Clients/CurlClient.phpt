@@ -17,13 +17,27 @@ use Tester\Assert;
 
 class CurlClientTestCase extends ClientsTestCase
 {
-	protected function createClient($beforeCurlExec = NULL)
+	protected function createClient($optionsOrCallback = NULL)
 	{
-		return new Clients\CurlClient($beforeCurlExec);
+		return new Clients\CurlClient($optionsOrCallback);
 	}
 
 
-	public function testClientSetup()
+	public function testClientSetupOptions()
+	{
+		$client = $this->createClient([
+			CURLOPT_CUSTOMREQUEST => 'PUT',
+		]);
+
+		$response = $client->request(
+			new Request('GET', $this->baseUrl . '/method')
+		);
+
+		Assert::same('method-PUT', $response->getBody());
+	}
+
+
+	public function testClientSetupCallback()
 	{
 		$client = $this->createClient(function($context, $url) use (& $called) {
 			Assert::type('resource', $context);

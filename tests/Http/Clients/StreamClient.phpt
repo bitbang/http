@@ -13,13 +13,29 @@ use Tester\Assert;
 
 class StreamClientTestCase extends ClientsTestCase
 {
-	protected function createClient($onContextCreate = NULL)
+	protected function createClient($optionsOrCallback = NULL)
 	{
-		return new Clients\StreamClient($onContextCreate);
+		return new Clients\StreamClient($optionsOrCallback);
 	}
 
 
-	public function testClientSetup()
+	public function testClientSetupOptions()
+	{
+		$client = $this->createClient([
+			'http' => [
+				'method' => 'PUT',
+			],
+		]);
+
+		$response = $client->request(
+			new Request('GET', $this->baseUrl . '/method')
+		);
+
+		Assert::same('method-PUT', $response->getBody());
+	}
+
+
+	public function testClientSetupCallback()
 	{
 		$client = $this->createClient(function($context, $url) use (& $called) {
 			Assert::type('resource', $context);

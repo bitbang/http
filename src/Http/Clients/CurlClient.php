@@ -12,6 +12,9 @@ use Bitbang\Http;
  */
 class CurlClient extends AbstractClient
 {
+	/** @var array */
+	private $options = [];
+
 	/** @var callable|NULL */
 	private $beforeCurlExec;
 
@@ -20,17 +23,21 @@ class CurlClient extends AbstractClient
 
 
 	/**
-	 * @param  callable  function(resource $curlHandle, string url)
+	 * @param  array|callable function(resource $curlHandle, string url)
 	 *
 	 * @throws Http\LogicException
 	 */
-	public function __construct($beforeCurlExec = NULL)
+	public function __construct($optionsOrCallback = NULL)
 	{
 		if (!extension_loaded('curl')) {
 			throw new Http\LogicException('cURL extension is not loaded.');
 		}
 
-		$this->beforeCurlExec = $beforeCurlExec;
+		if (is_array($optionsOrCallback) && array_keys($optionsOrCallback) !== [0, 1]) {
+			$this->options = $optionsOrCallback;
+		} else {
+			$this->beforeCurlExec = $optionsOrCallback;
+		}
 	}
 
 
@@ -90,6 +97,8 @@ class CurlClient extends AbstractClient
 		if (defined('CURLOPT_PROTOCOLS')) {  # HHVM issue. Even cURL v7.26.0, constants are missing.
 			$options[CURLOPT_PROTOCOLS] = CURLPROTO_HTTP | CURLPROTO_HTTPS;
 		}
+
+		$options = array_replace($options, $this->options);
 
 		if (!$this->curl) {
 			$this->curl = curl_init();
