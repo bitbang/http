@@ -17,7 +17,7 @@ if (defined('HHVM_VERSION')) {
 	echo "# Starting HTTP server for tests on $config[address]:$config[port]... ";
 	$server = new Tests\BackgroundProcess;
 	$server->start(
-		Helpers::escapeArg(PHP_BINARY) . " -S $config[address]:$config[port] " . Helpers::escapeArg(__DIR__ . '/server/index.php'),
+		Helpers::escapeArg(PHP_BINARY) . " -S $config[address]:$config[port] -d always_populate_raw_post_data=-1" . Helpers::escapeArg(__DIR__ . '/server/index.php'),
 		__DIR__ . '/temp/http.log',
 		__DIR__ . '/temp/http.log'
 	);
