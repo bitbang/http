@@ -71,4 +71,52 @@ class Helpers
 		return $parsed;
 	}
 
+
+	/**
+	 * Creates absolute URL from $relative.
+	 *
+	 * @param  string
+	 * @param  string
+	 * @return string
+	 */
+	public static function absolutizeUrl($absolute, $relative)
+	{
+		$parts = self::parseUrl($relative);
+		if (isset($parts['scheme'])) {
+			return $relative;
+		}
+
+		$absolute = self::parseUrl($absolute);
+		$url = $absolute['scheme'] . ':';
+
+		if (isset($parts['authority'])) {
+			return $url . $relative;
+		}
+		$url .= '//' . $absolute['authority'];
+
+		if (isset($parts['path'])) {
+			if ($parts['path'] !== '' && $parts['path'][0] === '/') {
+				return $url . $parts['path'];
+			}
+
+			if (isset($absolute['path'])) {
+				return $url . substr($absolute['path'], 0, strrpos($absolute['path'], '/')) . '/' . $relative;
+			}
+
+			return $url . '/' . $relative;
+		}
+		$url .= isset($absolute['path']) ? $absolute['path'] : '';
+
+		if (isset($parts['query'])) {
+			return $url . $relative;
+		}
+		$url .= isset($absolute['query']) ? "?$absolute[query]" : '';
+
+		if (isset($parts['fragment'])) {
+			return $url . $relative;
+		}
+
+		return $url . (isset($absolute['fragment']) ? "#$absolute[fragment]" : '');
+	}
+
 }
