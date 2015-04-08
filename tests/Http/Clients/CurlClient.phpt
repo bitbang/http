@@ -61,7 +61,7 @@ class CurlClientTestCase extends ClientsTestCase
 			new Request('GET', $this->baseUrl . '/user-agent')
 		);
 
-		Assert::same('Bitbang/' . Library::VERSION . ' (cUrl)', $response->getHeader('X-User-Agent'));
+		Assert::same('Bitbang/' . Library::VERSION . ' (cURL)', $response->getHeader('X-User-Agent'));
 	}
 
 }
