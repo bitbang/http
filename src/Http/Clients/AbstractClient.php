@@ -56,7 +56,7 @@ abstract class AbstractClient extends Http\Sanity implements Http\IClient
 				/** @todo Use the same HTTP $method for redirection? Set $body to NULL? */
 				$request = new Http\Request(
 					$request->getMethod(),
-					$response->getHeader('Location'),
+					Http\Helpers::absolutizeUrl($request->getUrl(), $response->getHeader('Location')),
 					$request->getHeaders(),
 					$request->getBody()
 				);

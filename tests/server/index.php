@@ -27,7 +27,11 @@ if ($requestUri === '/ping') {
 	header("X-Bar: a\n b\n\tc");
 
 } elseif (preg_match('~^/redirect/([0-9]{3})$~', $requestUri, $m)) {
-	header("Location: http://$_SERVER[HTTP_HOST]/redirected", TRUE, (int) $m[1]);
+	header("Location: http://$_SERVER[HTTP_HOST]/redirected", TRUE, (int)$m[1]);
+	echo 'Redirection made';
+
+} elseif ($requestUri === '/relative-redirect') {
+	header("Location: /redirected", TRUE, 301);
 	echo 'Redirection made';
 
 } elseif ($requestUri === '/redirected') {

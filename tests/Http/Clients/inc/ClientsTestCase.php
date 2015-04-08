@@ -152,6 +152,27 @@ abstract class ClientsTestCase extends Tester\TestCase
 	}
 
 
+	final public function testRelativeRedirect()
+	{
+		$client = $this->createClient();
+
+		$response = $client->request(
+			new Request('GET', $this->baseUrl . '/relative-redirect')
+		);
+
+		Assert::same('Redirection finished', $response->getBody());
+		Assert::same(200, $response->getCode());
+
+		$previous = $response->getPrevious();
+		Assert::type('Bitbang\Http\Response', $previous);
+		Assert::same('Redirection made', $previous->getBody());
+		Assert::same(301, $previous->getCode());
+		Assert::true($previous->hasHeader('Location'));
+		Assert::same('/redirected', $previous->getHeader('Location'));
+		Assert::null($previous->getPrevious());
+	}
+
+
 	final public function testOnRequestOnResponse()
 	{
 		$client = $this->createClient();
