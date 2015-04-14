@@ -9,6 +9,6 @@ namespace Bitbang\Http;
 class Library
 {
 	/** @var string */
-	const VERSION = '1.0.0';
+	const VERSION = '0.1.0';
 
 }
