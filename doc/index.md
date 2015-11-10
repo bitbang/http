@@ -28,7 +28,7 @@ Topics
 - [Library class](library.md)
 - Exceptions (TODO)
 - [Working with Request & Response](request-response.md)
-- Client implementations (TODO)
+- [Client implementations](clients.md)
 - Caching (TODO)
 - Browser (TODO)
 - Helpers (TODO)
