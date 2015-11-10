@@ -124,9 +124,9 @@ $client->onRequest(function (Http\Request $request) {
 $client->onResponse(function (Http\Response $response) {
 	var_dump($response);
 });
-
-Note: Never modify `$request` or `$response` here. It doesn't worth it.
 ```
+
+Note: Never modify `$request` or `$response` here. It's not worth it.
 
 
 ### Example - Download some HTML
