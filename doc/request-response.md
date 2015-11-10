@@ -5,32 +5,32 @@ There are two classes. [Http\Request](https://github.com/bitbang/http/blob/maste
 You will usually instantiate the Request object. And the Response object you will usually get from the client as a response to request.
 
 
-## Working with HTTP headers
+## Common methods to work with HTTP headers
 
-Both Request and Response objects have some same methods to work with HTTP headers. Header names are always case-insensitive.
+Both Request and Response objects have the same methods for HTTP headers reading. Header names are always case-insensitive.
 
-### hasHeader($name)
+#### hasHeader($name)
 Returns TRUE/FALSE when header exists.
 
-### hasMultiHeader($name)
+#### hasMultiHeader($name)
 Returns TRUE/FALSE when header exists and exists more then once. E.g `Set-Cookie`.
 
-### getHeader($name, $default = NULL)
+#### getHeader($name, $default = NULL)
 Returns header value if exists, `$default` otherwise.
 
-### getMultiHeader($name, array $defaults = [])
+#### getMultiHeader($name, array $defaults = [])
 Returns header values as an array if exists, `$defaults` otherwise. The result is always an array even the header value is only one.
 
-### getHeaders()
+#### getHeaders()
 Returns all headers as an indexed array. Indexes are lower-cased header names. If is the header multi-value, the last one is returned.
 
-### getMultiHeaders()
+#### getMultiHeaders()
 Returns all headers as an indexed array of arrays. Indexes are lower-cased header names. Even simple header values are returns as an array.
 
 
 ## Working with payload
 
-Both Request and Response objects have the same method `getBody()`. And actually that's all. It returns raw body payload. It can be NULL when never set.
+Both Request and Response objects have the same method `getBody()`. It returns raw body payload. It can be NULL when never set.
 
 
 ## Request
@@ -48,26 +48,26 @@ $request = new Http\Request(
 
 Among the headers methods mentioned above, the Request has more methods to adjust HTTP headers. And other methods specific to HTTP request.
 
-### addHeader($name, $value)
+#### addHeader($name, $value)
 Sets header value only if header does not exist.
 
-### addMultiHeader($name, $value)
+#### addMultiHeader($name, $value)
 Adds another value to header. The value is always added even the same pair header-value already exists.
 
-### setHeader($name, $value)
-Replaces header value. The header value is always overwritten. The `NULL` value removes header.
+#### setHeader($name, $value)
+Replaces header value. The header value is always overwritten. The `NULL` removes header.
 
-### setMultiHeader($name, array $value)
-Replaces header with multi value. The header value is always overwritten. The empty array `[]` value removes header.
+#### setMultiHeader($name, array $value)
+Replaces header with multi value. The header value is always overwritten. The empty array removes header.
 
-### isMethod($method)
-Returns TRUE/FALSE when request HTTP method is `$method`. Comparison is case-sensitive, so result is same for `POST` or `PoSt`. You can find some class constants but list is not exhausting.
+#### isMethod($method)
+Returns TRUE/FALSE when request HTTP method is `$method`. Comparison is case-insensitive, so result is same for `POST` or `PoSt`. You can find some class constants but list is not exhausting.
 
-### getMethod()
-Returns request HTTP method as you set in constructor. When you set `DeLeTe` you will get `DeLeTe`.
+#### getMethod()
+Returns request HTTP method as it has been set in constructor. When you set `DeLeTe` you will get `DeLeTe`.
 
-### getUrl()
-Returns request URL as you set in constructor.
+#### getUrl()
+Returns request URL as it has been set in constructor.
 
 
 ## Response
@@ -86,16 +86,16 @@ The Response class has no methods to set or append HTTP headers. By other words,
 
 Following methods are response specific.
 
-### getCode()
+#### getCode()
 Returns HTTP response status code. Always as an integer. E.g. 200, 301, 404, 500... Some of them are available as class constants.
 
-### isCode($code)
+#### isCode($code)
 Returns TRUE/FALSE when response status code is `$code`.
 
-### getPrevious()
+#### getPrevious()
 Returns previous HTTP response if exists, NULL otherwise. This response chaining happens on HTTP redirection or response caching. So you can see whole HTTP communication.
 
-### setPrevious(Http\Response $response)
+#### setPrevious(Http\Response $response)
 Sets previous HTTP response. You will get `Http\LogicException` when previous is already set. More or less, you should not use this method.
 
 
