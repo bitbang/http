@@ -2,7 +2,7 @@ HTTP Client
 ===========
 
 # Documentation
-Documentation is a part of the library. It is in [doc directory](doc/index.md). You can find there quick-start example.
+Documentation is a part of the library. It is in [doc directory](doc/). You can find there quick-start example.
 
 # License
 The MIT License (MIT)
