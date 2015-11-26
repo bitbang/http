@@ -2,7 +2,9 @@ HTTP Client
 ===========
 
 # Documentation
-Documentation is a part of the library. It is in [doc directory](doc/). You can find there quick-start example.
+Documentation is a part of the library. It is in [doc directory](doc/). You can find there quick-start example. [API documentation](https://codedoc.pub/bitbang/http/master/index.html) is on Codedoc.
+
+[![Build Status](https://api.travis-ci.org/bitbang/http.svg?branch=master)](https://travis-ci.org/bitbang/http)
 
 # License
 The MIT License (MIT)
