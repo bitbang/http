@@ -41,7 +41,7 @@ abstract class AbstractClient extends Http\Sanity implements Http\IClient
 			$this->setupRequest($request);
 
 			$this->onRequest && call_user_func($this->onRequest, $request);
-			$response = $this->process($request);
+			$response = $this->processRequest($request);
 			$this->onResponse && call_user_func($this->onResponse, $response);
 
 			$previous = $response->setPrevious($previous);
@@ -103,6 +103,6 @@ abstract class AbstractClient extends Http\Sanity implements Http\IClient
 	 *
 	 * @throws Http\BadResponseException
 	 */
-	abstract protected function process(Http\Request $request);
+	abstract protected function processRequest(Http\Request $request);
 
 }

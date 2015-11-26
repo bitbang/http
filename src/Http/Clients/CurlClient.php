@@ -54,7 +54,7 @@ class CurlClient extends AbstractClient
 	 *
 	 * @throws Http\BadResponseException
 	 */
-	protected function process(Http\Request $request)
+	protected function processRequest(Http\Request $request)
 	{
 		$headers = [];
 		foreach ($request->getHeaders() as $name => $value) {
