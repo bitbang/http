@@ -19,7 +19,7 @@ test(function() {
 			stream_context_set_option($context, 'ssl', 'ciphers', 'ALL');  # testing SSL wrapper limitation
 		});
 
-		$client->request(
+		$client->process(
 			new Request('GET', getBaseSslUrl())
 		);
 	}, 'Bitbang\Http\BadResponseException');
@@ -47,7 +47,7 @@ test(function() {
 		stream_context_set_option($context, 'ssl', 'cafile', __DIR__ . '/../../server/cert/ca.pem');
 	});
 
-	$response = $client->request(
+	$response = $client->process(
 		new Request('GET', getBaseSslUrl() . '/ping')
 	);
 

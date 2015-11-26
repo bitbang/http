@@ -24,7 +24,7 @@ abstract class ClientsTestCase extends Tester\TestCase
 
 	final public function test200()
 	{
-		$response = $this->createClient()->request(
+		$response = $this->createClient()->process(
 			new Request('GET', $this->baseUrl . '/200')
 		);
 
@@ -35,7 +35,7 @@ abstract class ClientsTestCase extends Tester\TestCase
 
 	final public function test404()
 	{
-		$response = $this->createClient()->request(
+		$response = $this->createClient()->process(
 			new Request('GET', $this->baseUrl . '/404')
 		);
 
@@ -46,7 +46,7 @@ abstract class ClientsTestCase extends Tester\TestCase
 
 	final public function testReceiveHeaders()
 	{
-		$response = $this->createClient()->request(
+		$response = $this->createClient()->process(
 			new Request('GET', $this->baseUrl . '/receive-headers')
 		);
 
@@ -58,7 +58,7 @@ abstract class ClientsTestCase extends Tester\TestCase
 	{
 		$rand = rand(1, 999);
 
-		$response = $this->createClient()->request(
+		$response = $this->createClient()->process(
 			new Request('GET', $this->baseUrl . '/send-headers', ['X-Foo' => "foo-$rand"])
 		);
 
@@ -81,7 +81,7 @@ abstract class ClientsTestCase extends Tester\TestCase
 		$client = $this->createClient();
 		$client->redirectCodes = NULL;
 
-		$response = $client->request(
+		$response = $client->process(
 			new Request('GET', $this->baseUrl . '/redirect/201')
 		);
 
@@ -101,7 +101,7 @@ abstract class ClientsTestCase extends Tester\TestCase
 		$client = $this->createClient();
 		$client->redirectCodes = [307];
 
-		$response = $client->request(
+		$response = $client->process(
 			new Request('GET', $this->baseUrl . '/redirect/201')
 		);
 
@@ -111,7 +111,7 @@ abstract class ClientsTestCase extends Tester\TestCase
 		Assert::null($response->getPrevious());
 
 
-		$response = $client->request(
+		$response = $client->process(
 			new Request('GET', $this->baseUrl . '/redirect/307')
 		);
 
@@ -131,7 +131,7 @@ abstract class ClientsTestCase extends Tester\TestCase
 		$client = $this->createClient();
 		$client->redirectCodes = [];
 
-		$response = $client->request(
+		$response = $client->process(
 			new Request('GET', $this->baseUrl . '/redirect/201')
 		);
 
@@ -141,7 +141,7 @@ abstract class ClientsTestCase extends Tester\TestCase
 		Assert::null($response->getPrevious());
 
 
-		$response = $client->request(
+		$response = $client->process(
 			new Request('GET', $this->baseUrl . '/redirect/307')
 		);
 
@@ -156,7 +156,7 @@ abstract class ClientsTestCase extends Tester\TestCase
 	{
 		$client = $this->createClient();
 
-		$response = $client->request(
+		$response = $client->process(
 			new Request('GET', $this->baseUrl . '/relative-redirect')
 		);
 
@@ -190,7 +190,7 @@ abstract class ClientsTestCase extends Tester\TestCase
 		Assert::null($insideRequest);
 		Assert::null($insideResponse);
 
-		$client->request(
+		$client->process(
 			new Request('GET', $this->baseUrl . '/ping')
 		);
 
@@ -210,7 +210,7 @@ abstract class ClientsTestCase extends Tester\TestCase
 
 		$client->maxRedirects = 6;
 		$counter = -1;
-		$response = $client->request(clone $request);
+		$response = $client->process(clone $request);
 		Assert::same(5, $counter);
 		Assert::same('Redirection finished', $response->getBody());
 		Assert::same(200, $response->getCode());
@@ -218,7 +218,7 @@ abstract class ClientsTestCase extends Tester\TestCase
 
 		$client->maxRedirects = 5;
 		$counter = -1;
-		$response = $client->request(clone $request);
+		$response = $client->process(clone $request);
 		Assert::same(5, $counter);
 		Assert::same('Redirection finished', $response->getBody());
 		Assert::same(200, $response->getCode());
@@ -227,7 +227,7 @@ abstract class ClientsTestCase extends Tester\TestCase
 		$client->maxRedirects = 4;
 		$counter = -1;
 		Assert::exception(function() use ($client, $request) {
-			$client->request($request);
+			$client->process($request);
 		}, 'Bitbang\Http\RedirectLoopException', 'Maximum redirect count (4) achieved.');
 		Assert::same(4, $counter);
 	}
@@ -235,7 +235,7 @@ abstract class ClientsTestCase extends Tester\TestCase
 
 	final public function testOwnUserAgent()
 	{
-		$response = $this->createClient()->request(
+		$response = $this->createClient()->process(
 			new Request('GET', $this->baseUrl . '/user-agent', ['User-Agent' => 'Tested'])
 		);
 
@@ -245,22 +245,22 @@ abstract class ClientsTestCase extends Tester\TestCase
 
 	final public function testHttpMethod()
 	{
-		$response = $this->createClient()->request(
+		$response = $this->createClient()->process(
 			new Request('POST', $this->baseUrl . '/method')
 		);
 		Assert::same('method-POST', $response->getBody());
 
-		$response = $this->createClient()->request(
+		$response = $this->createClient()->process(
 			new Request('PUT', $this->baseUrl . '/method')
 		);
 		Assert::same('method-PUT', $response->getBody());
 
-		$response = $this->createClient()->request(
+		$response = $this->createClient()->process(
 			new Request('DELETE', $this->baseUrl . '/method')
 		);
 		Assert::same('method-DELETE', $response->getBody());
 
-		$response = $this->createClient()->request(
+		$response = $this->createClient()->process(
 			new Request('HEAD', $this->baseUrl . '/method')
 		);
 		Assert::same('', $response->getBody());

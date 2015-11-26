@@ -16,7 +16,7 @@ if (!extension_loaded('curl')) {
 test(function() {
 	$e = Assert::exception(function() {
 		$client = new Clients\CurlClient;
-		$client->request(
+		$client->process(
 			new Request('GET', getBaseSslUrl())
 		);
 	}, 'Bitbang\Http\BadResponseException', '%A%certificate%A%');
@@ -31,7 +31,7 @@ test(function() {
 		curl_setopt($curl, CURLOPT_CAINFO, __DIR__ . '/../../server/cert/ca.pem');
 	});
 
-	$response = $client->request(
+	$response = $client->process(
 		new Request('GET', getBaseSslUrl() . '/ping')
 	);
 

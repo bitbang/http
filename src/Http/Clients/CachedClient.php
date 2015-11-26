@@ -70,7 +70,7 @@ class CachedClient extends Http\Sanity implements Http\IClient
 	 *
 	 * @throws Http\BadResponseException
 	 */
-	public function request(Http\Request $request)
+	public function process(Http\Request $request)
 	{
 		$request = clone $request;
 
@@ -99,7 +99,7 @@ class CachedClient extends Http\Sanity implements Http\IClient
 			}
 		}
 
-		$response = $this->client->request($request);
+		$response = $this->client->process($request);
 
 		if ($this->isCacheable($response) || $this->greedyCaching) {
 			$this->cache->save($cacheKey, clone $response);
@@ -154,6 +154,13 @@ class CachedClient extends Http\Sanity implements Http\IClient
 		}
 
 		return $response->hasHeader('ETag') || $response->hasHeader('Last-Modified');
+	}
+
+
+	/** @deprecated */
+	public function request(Http\Request $request)
+	{
+		return $this->process($request);
 	}
 
 }

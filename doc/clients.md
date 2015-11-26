@@ -8,7 +8,7 @@ namespace Bitbang\Http;
 interface IClient
 {
 	/** @return Response */
-	function request(Request $request);
+	function process(Request $request);
 	
 	function onRequest($callback);
 
@@ -16,7 +16,7 @@ interface IClient
 }
 ```
 
-The `request()` method is the most important, the `onRequest()` and `onResponse()` are for traffic observation.
+The `process()` method is the most important, the `onRequest()` and `onResponse()` are for traffic observation.
 
 
 ## StreamClient

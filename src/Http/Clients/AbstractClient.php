@@ -31,7 +31,7 @@ abstract class AbstractClient extends Http\Sanity implements Http\IClient
 	 * @throws Http\BadResponseException
 	 * @throws Http\RedirectLoopException
 	 */
-	public function request(Http\Request $request)
+	public function process(Http\Request $request)
 	{
 		$request = clone $request;
 
@@ -104,5 +104,12 @@ abstract class AbstractClient extends Http\Sanity implements Http\IClient
 	 * @throws Http\BadResponseException
 	 */
 	abstract protected function processRequest(Http\Request $request);
+
+
+	/** @deprecated */
+	public function request(Http\Request $request)
+	{
+		return $this->process($request);
+	}
 
 }

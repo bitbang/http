@@ -29,7 +29,7 @@ class CurlClientTestCase extends ClientsTestCase
 			CURLOPT_CUSTOMREQUEST => 'PUT',
 		]);
 
-		$response = $client->request(
+		$response = $client->process(
 			new Request('GET', $this->baseUrl . '/method')
 		);
 
@@ -47,7 +47,7 @@ class CurlClientTestCase extends ClientsTestCase
 			$called = TRUE;
 		});
 
-		$client->request(
+		$client->process(
 			new Request('GET', $this->baseUrl . '/ping')
 		);
 
@@ -57,7 +57,7 @@ class CurlClientTestCase extends ClientsTestCase
 
 	public function testUserAgent()
 	{
-		$response = $this->createClient()->request(
+		$response = $this->createClient()->process(
 			new Request('GET', $this->baseUrl . '/user-agent')
 		);
 

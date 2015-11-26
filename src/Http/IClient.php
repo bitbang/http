@@ -13,7 +13,7 @@ interface IClient
 	/**
 	 * @return Response
 	 */
-	function request(Request $request);
+	function process(Request $request);
 
 
 	/**

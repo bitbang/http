@@ -27,7 +27,7 @@ class StreamClientTestCase extends ClientsTestCase
 			],
 		]);
 
-		$response = $client->request(
+		$response = $client->process(
 			new Request('GET', $this->baseUrl . '/method')
 		);
 
@@ -45,7 +45,7 @@ class StreamClientTestCase extends ClientsTestCase
 			$called = TRUE;
 		});
 
-		$client->request(
+		$client->process(
 			new Request('GET', $this->baseUrl . '/ping')
 		);
 
@@ -55,7 +55,7 @@ class StreamClientTestCase extends ClientsTestCase
 
 	public function testUserAgent()
 	{
-		$response = $this->createClient()->request(
+		$response = $this->createClient()->process(
 			new Request('GET', $this->baseUrl . '/user-agent')
 		);
 
