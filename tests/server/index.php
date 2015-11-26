@@ -23,8 +23,9 @@ if ($requestUri === '/ping') {
 } elseif ($requestUri === '/send-headers') {
 	header('X-Bar: bar-' . $_SERVER['HTTP_X_FOO']);
 
-} elseif ($requestUri === '/receive-multiple-line-header') {
-	header("X-Bar: a\n b\n\tc");
+//} elseif ($requestUri === '/receive-multiple-line-header') {
+//	# Somewhere between PHP 5.5 and 5.6, PHP stopped setting such header. Don't know how to test it.
+//	header("X-Bar: a\n b\n\tc");
 
 } elseif (preg_match('~^/redirect/([0-9]{3})$~', $requestUri, $m)) {
 	header("Location: http://$_SERVER[HTTP_HOST]/redirected", TRUE, (int)$m[1]);

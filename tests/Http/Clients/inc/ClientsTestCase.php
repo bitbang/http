@@ -66,14 +66,14 @@ abstract class ClientsTestCase extends Tester\TestCase
 	}
 
 
-	final public function testReceiveMultipleLineHeader()
-	{
-		$response = $this->createClient()->request(
-			new Request('GET', $this->baseUrl . '/receive-multiple-line-header')
-		);
-
-		Assert::same('a b c', $response->getHeader('X-Bar'));
-	}
+//	final public function testReceiveMultipleLineHeader()
+//	{
+//		$response = $this->createClient()->request(
+//			new Request('GET', $this->baseUrl . '/receive-multiple-line-header')
+//		);
+//
+//		Assert::same('a b c', $response->getHeader('X-Bar'));
+//	}
 
 
 	final public function testRedirectAlways()
