@@ -50,7 +50,8 @@ abstract class ClientsTestCase extends Tester\TestCase
 			new Request('GET', $this->baseUrl . '/receive-headers')
 		);
 
-		Assert::same('bitbang/http.tests', $response->getHeader('X-Powered-By'));
+		Assert::same(['bitbang/http.tests'], $response->getMultiHeader('X-Powered-By'));
+		Assert::same(['one', 'two'], $response->getMultiHeader('X-Multi'));
 	}
 
 

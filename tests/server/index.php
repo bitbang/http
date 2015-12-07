@@ -19,6 +19,8 @@ if ($requestUri === '/ping') {
 
 } elseif ($requestUri === '/receive-headers') {
 	header('X-Powered-By: bitbang/http.tests');
+	header('X-Multi: one');
+	header('X-Multi: two', FALSE);
 
 } elseif ($requestUri === '/send-headers') {
 	header('X-Bar: bar-' . $_SERVER['HTTP_X_FOO']);

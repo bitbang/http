@@ -83,11 +83,13 @@ class CurlClient extends AbstractClient
 					$responseHeaders = [];
 
 				} elseif (in_array(substr($line, 0, 1), [' ', "\t"], TRUE)) {
-					$responseHeaders[$last] .= ' ' . trim($line);  # RFC2616, 2.2
+					$last .= ' ' . trim($line);  # RFC2616, 2.2
 
 				} elseif ($line !== "\r\n") {
 					list($name, $value) = explode(':', $line, 2);
-					$responseHeaders[$last = trim($name)] = trim($value);
+					$key = trim($name);
+					$responseHeaders[$key][] = trim($value);
+					$last = & $responseHeaders[$key][count($responseHeaders[$key]) - 1];
 				}
 
 				return strlen($line);

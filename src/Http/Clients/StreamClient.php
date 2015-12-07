@@ -120,10 +120,13 @@ class StreamClient extends AbstractClient
 		$headers = [];
 		foreach ($http_response_header as $header) {
 			if (in_array(substr($header, 0, 1), [' ', "\t"], TRUE)) {
-				$headers[$last] .= ' ' . trim($header);  # RFC2616, 2.2
+				$last .= ' ' . trim($header);  # RFC2616, 2.2
+
 			} else {
 				list($name, $value) = explode(':', $header, 2) + [NULL, NULL];
-				$headers[$last = trim($name)] = trim($value);
+				$key = trim($name);
+				$headers[$key][] = trim($value);
+				$last = & $headers[$key][count($headers[$key]) - 1];
 			}
 		}
 
