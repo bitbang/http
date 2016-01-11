@@ -26,3 +26,5 @@ require __DIR__ . '/Http/Decoders/DefaultDecoder.php';
 require __DIR__ . '/Http/Message.php';
 require __DIR__ . '/Http/Request.php';
 require __DIR__ . '/Http/Response.php';
+
+require __DIR__ . '/Http/Browser.php';
