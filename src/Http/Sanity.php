@@ -9,6 +9,8 @@ namespace Bitbang\Http;
 abstract class Sanity
 {
 	/**
+	 * @param  string
+	 *
 	 * @throws LogicException
 	 */
 	public function & __get($name)
@@ -18,6 +20,8 @@ abstract class Sanity
 
 
 	/**
+	 * @param  string
+	 * @param  mixed
 	 * @throws LogicException
 	 */
 	public function __set($name, $value)

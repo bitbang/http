@@ -26,6 +26,7 @@ abstract class AbstractClient extends Http\Sanity implements Http\IClient
 
 
 	/**
+	 * @param  Http\Request $request
 	 * @return Http\Response
 	 *
 	 * @throws Http\BadResponseException
@@ -99,6 +100,7 @@ abstract class AbstractClient extends Http\Sanity implements Http\IClient
 
 
 	/**
+	 * @param  Http\Request $request
 	 * @return Http\Response
 	 *
 	 * @throws Http\BadResponseException
@@ -106,7 +108,11 @@ abstract class AbstractClient extends Http\Sanity implements Http\IClient
 	abstract protected function processRequest(Http\Request $request);
 
 
-	/** @deprecated */
+	/**
+	 * @deprecated
+	 * @param  Http\Request $request
+	 * @return Http\Response
+	 */
 	public function request(Http\Request $request)
 	{
 		return $this->process($request);

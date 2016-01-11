@@ -26,8 +26,8 @@ class CachedClient extends Http\Sanity implements Http\IClient
 
 
 	/**
-	 * @param  Http\ICache
-	 * @param  Http\IClient
+	 * @param  Http\ICache $cache
+	 * @param  Http\IClient $client
 	 */
 	public function __construct(Http\ICache $cache, Http\IClient $client)
 	{
@@ -46,7 +46,7 @@ class CachedClient extends Http\Sanity implements Http\IClient
 
 
 	/**
-	 * @param  bool  if TRUE, every response will be cached and never re-checked on server
+	 * @param  bool $greedy  if TRUE, every response will be cached and never re-checked on server
 	 * @return self
 	 */
 	public function setGreedyCaching($greedy)
@@ -66,6 +66,7 @@ class CachedClient extends Http\Sanity implements Http\IClient
 
 
 	/**
+	 * @param  Http\Request $request
 	 * @return Http\Response
 	 *
 	 * @throws Http\BadResponseException
@@ -142,6 +143,7 @@ class CachedClient extends Http\Sanity implements Http\IClient
 
 
 	/**
+	 * @param  Http\Response $response
 	 * @return bool
 	 */
 	protected function isCacheable(Http\Response $response)
@@ -157,7 +159,11 @@ class CachedClient extends Http\Sanity implements Http\IClient
 	}
 
 
-	/** @deprecated */
+	/**
+	 * @deprecated
+	 * @param  Http\Request $request
+	 * @return Http\Response
+	 */
 	public function request(Http\Request $request)
 	{
 		return $this->process($request);

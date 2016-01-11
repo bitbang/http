@@ -28,11 +28,11 @@ class Request extends Message
 
 
 	/**
-	 * @param  string
-	 * @param  string
-	 * @param  array
-	 * @param  string|NULL
-	 * @param  IDecoder
+	 * @param  string $method
+	 * @param  string $url
+	 * @param  array $headers
+	 * @param  string|NULL $body
+	 * @param  IDecoder $decoder
 	 */
 	public function __construct($method, $url, array $headers = [], $body = NULL, IDecoder $decoder = NULL)
 	{
@@ -84,12 +84,11 @@ class Request extends Message
 	/**
 	 * @param  string
 	 * @param  string|string[]
-	 * @param  bool
 	 * @return self
 	 */
-	public function addMultiHeader($name, $value, $append = TRUE)
+	public function addMultiHeader($name, $value)
 	{
-		return parent::addMultiHeader($name, $value, $append);
+		return parent::addMultiHeader($name, $value);
 	}
 
 

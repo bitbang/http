@@ -14,5 +14,6 @@ interface IDecoder
 	 * @param  Response
 	 * @return mixed
 	 */
-	function decode(Response $request);
+	function decode(Response $response);
+
 }

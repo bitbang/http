@@ -11,6 +11,7 @@ namespace Bitbang\Http;
 interface IClient
 {
 	/**
+	 * @param  Request
 	 * @return Response
 	 */
 	function process(Request $request);

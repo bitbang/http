@@ -77,6 +77,7 @@ abstract class Message extends Sanity
 
 	/**
 	 * @param  string
+	 * @param  array
 	 * @return mixed[]
 	 */
 	public function getMultiHeader($name, array $defaults = [])

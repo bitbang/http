@@ -31,10 +31,10 @@ class Response extends Message
 
 
 	/**
-	 * @param  int
-	 * @param  array
-	 * @param  string
-	 * @param  IDecoder
+	 * @param  int $code
+	 * @param  array $headers
+	 * @param  string $body
+	 * @param  IDecoder $decoder
 	 */
 	public function __construct($code, array $headers, $body, IDecoder $decoder = NULL)
 	{
@@ -73,6 +73,7 @@ class Response extends Message
 
 
 	/**
+	 * @param  Response
 	 * @return self
 	 *
 	 * @throws LogicException

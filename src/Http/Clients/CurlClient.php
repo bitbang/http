@@ -50,6 +50,7 @@ class CurlClient extends AbstractClient
 
 
 	/**
+	 * @param  Http\Request  $request
 	 * @return Http\Response
 	 *
 	 * @throws Http\BadResponseException
