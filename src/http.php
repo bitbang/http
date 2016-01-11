@@ -7,6 +7,7 @@ if (PHP_VERSION_ID < 50400) {
 
 require __DIR__ . '/Http/IClient.php';
 require __DIR__ . '/Http/ICache.php';
+require __DIR__ . '/Http/IDecoder.php';
 
 require __DIR__ . '/Http/exceptions.php';
 require __DIR__ . '/Http/Helpers.php';
@@ -19,6 +20,8 @@ require __DIR__ . '/Http/Clients/CurlClient.php';
 require __DIR__ . '/Http/Clients/StreamClient.php';
 
 require __DIR__ . '/Http/Storages/FileCache.php';
+
+require __DIR__ . '/Http/Decoders/DefaultDecoder.php';
 
 require __DIR__ . '/Http/Message.php';
 require __DIR__ . '/Http/Request.php';

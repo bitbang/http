@@ -25,3 +25,18 @@ Assert::same($previous, $response->getPrevious());
 Assert::exception(function() use ($response, $previous) {
 	$response->setPrevious($previous);
 }, 'Bitbang\Http\LogicException', 'Previous response is already set.');
+
+
+class TestDecoder implements Http\IDecoder
+{
+	public function decode(Http\Response $response)
+	{
+		return 'Decoded: ' . $response->getBody();
+	}
+}
+
+$response = new Http\Response('200', [], 'body');
+Assert::same('body', $response->decode());
+
+$response = new Http\Response('200', [], 'body', new TestDecoder);
+Assert::same('Decoded: body', $response->decode());

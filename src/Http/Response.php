@@ -34,11 +34,12 @@ class Response extends Message
 	 * @param  int
 	 * @param  array
 	 * @param  string
+	 * @param  IDecoder
 	 */
-	public function __construct($code, array $headers, $body)
+	public function __construct($code, array $headers, $body, IDecoder $decoder = NULL)
 	{
 		$this->code = (int) $code;
-		parent::__construct($headers, $body);
+		parent::__construct($headers, $body, $decoder);
 	}
 
 
@@ -84,6 +85,15 @@ class Response extends Message
 		$this->previous = $previous;
 
 		return $this;
+	}
+
+
+	/**
+	 * @return mixed
+	 */
+	public function decode()
+	{
+		return $this->getDecoder()->decode($this);
 	}
 
 }

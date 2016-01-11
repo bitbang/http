@@ -16,12 +16,16 @@ abstract class Message extends Sanity
 	/** @var string|NULL */
 	private $body;
 
+	/** @var IDecoder */
+	private $decoder;
+
 
 	/**
 	 * @param  array
 	 * @param  string|NULL
+	 * @param  IDecoder
 	 */
-	public function __construct(array $headers = [], $body = NULL)
+	public function __construct(array $headers = [], $body = NULL, IDecoder $decoder = NULL)
 	{
 		foreach ($headers as $name => $values) {
 			$values = (array) $values;
@@ -30,6 +34,7 @@ abstract class Message extends Sanity
 			}
 		}
 		$this->body = $body;
+		$this->decoder = $decoder ?: new Decoders\DefaultDecoder;
 	}
 
 
@@ -179,6 +184,15 @@ abstract class Message extends Sanity
 	public function getBody()
 	{
 		return $this->body;
+	}
+
+
+	/**
+	 * @return IDecoder
+	 */
+	public function getDecoder()
+	{
+		return $this->decoder;
 	}
 
 }

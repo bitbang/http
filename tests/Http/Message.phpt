@@ -129,3 +129,14 @@ test(function() {
 	Assert::same($message, $message->setHeader('foo', 'bar'));
 	Assert::same($message, $message->setMultiHeader('foo', ['bar']));
 });
+
+
+# Decoder
+test(function() {
+	$message = new TestMessage;
+	Assert::type('Bitbang\Http\Decoders\DefaultDecoder', $message->getDecoder());
+
+	$decoder = new Http\Decoders\DefaultDecoder;
+	$message = new TestMessage([], NULL, $decoder);
+	Assert::same($decoder, $message->getDecoder());
+});
