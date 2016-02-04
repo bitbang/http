@@ -106,6 +106,10 @@ test(function() {
 	$message->setMultiHeader('Set', ['val']);
 	Assert::same(['val'], $message->getMultiHeader('Set'));
 
+	$message->setMultiHeader('Set', []);
+	Assert::same([], $message->getMultiHeader('Set'));
+	Assert::null($message->getHeader('Set'));
+
 	$message->setHeader('a', 'val');
 	Assert::same('val', $message->getHeader('a'));
 
