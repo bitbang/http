@@ -94,12 +94,10 @@ class Helpers
 		}
 		$url .= '//' . $absolute['authority'];
 
-		if (isset($parts['path'])) {
-			if ($parts['path'] !== '' && $parts['path'][0] === '/') {
+		if (isset($parts['path']) && $parts['path'] !== '') {
+			if ($parts['path'][0] === '/') {
 				return $url . $parts['path'];
-			}
-
-			if (isset($absolute['path'])) {
+			} elseif (isset($absolute['path'])) {
 				return $url . substr($absolute['path'], 0, strrpos($absolute['path'], '/')) . '/' . $relative;
 			}
 

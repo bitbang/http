@@ -13,7 +13,7 @@ test(function() {
 		'/' => 'http://hostname.tld/',
 		'file2' => 'http://hostname.tld/path/file2',
 		'?query2' => 'http://hostname.tld/path/file.ext?query2',
-		'#fragment' => 'http://hostname.tld/path/file.ext?query#fragment',
+		'#fragment2' => 'http://hostname.tld/path/file.ext?query#fragment2',
 	];
 
 	foreach ($cases as $relative => $result) {
@@ -29,7 +29,7 @@ test(function() {
 		'/' => 'http://hostname.tld/',
 		'file2' => 'http://hostname.tld/file2',
 		'?query2' => 'http://hostname.tld?query2',
-		'#fragment' => 'http://hostname.tld#fragment',
+		'#fragment2' => 'http://hostname.tld#fragment2',
 	];
 
 	foreach ($cases as $relative => $result) {
@@ -45,7 +45,7 @@ test(function() {
 		'/' => 'http://hostname.tld/',
 		'file2' => 'http://hostname.tld/file2',
 		'?query2' => 'http://hostname.tld/?query2',
-		'#fragment' => 'http://hostname.tld/#fragment',
+		'#fragment2' => 'http://hostname.tld/#fragment2',
 	];
 
 	foreach ($cases as $relative => $result) {
@@ -61,10 +61,12 @@ test(function() {
 		'/' => 'http://hostname.tld/',
 		'file2' => 'http://hostname.tld/file2',
 		'?query2' => 'http://hostname.tld/?query2',
-		'#fragment' => 'http://hostname.tld/?query#fragment',
+		'#fragment2' => 'http://hostname.tld/?query#fragment2',
 	];
 
 	foreach ($cases as $relative => $result) {
 		Assert::same($result, Helpers::absolutizeUrl($absolute, $relative));
 	}
 });
+
+Assert::same('http://hostname.tld/#fragment', Helpers::absolutizeUrl('http://hostname.tld/#fragment', ''));
