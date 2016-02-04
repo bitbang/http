@@ -8,8 +8,10 @@ namespace Bitbang\Http;
  *
  * @author  Miloslav Hůla (https://github.com/milo)
  */
-abstract class Message extends Sanity
+abstract class Message
 {
+	use Strict;
+
 	/** @var array[name => value] */
 	private $headers = [];
 

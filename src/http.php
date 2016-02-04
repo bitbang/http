@@ -12,7 +12,7 @@ require __DIR__ . '/Http/IDecoder.php';
 require __DIR__ . '/Http/exceptions.php';
 require __DIR__ . '/Http/Helpers.php';
 require __DIR__ . '/Http/Library.php';
-require __DIR__ . '/Http/Sanity.php';
+require __DIR__ . '/Http/Strict.php';
 
 require __DIR__ . '/Http/Clients/AbstractClient.php';
 require __DIR__ . '/Http/Clients/CachedClient.php';

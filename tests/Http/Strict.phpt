@@ -6,8 +6,10 @@ use Bitbang\Http;
 use Tester\Assert;
 
 
-class C extends Http\Sanity
-{}
+class C
+{
+	use Http\Strict;
+}
 
 
 Assert::exception(function() {

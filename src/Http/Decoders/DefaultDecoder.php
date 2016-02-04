@@ -8,8 +8,9 @@ use Bitbang\Http;
 /**
  * @author  Miloslav Hůla (https://github.com/milo)
  */
-class DefaultDecoder extends Http\Sanity implements Http\IDecoder
+class DefaultDecoder implements Http\IDecoder
 {
+	use Http\Strict;
 
 	/**
 	 * @param  Http\Response $request

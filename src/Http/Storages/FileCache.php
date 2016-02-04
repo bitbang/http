@@ -10,8 +10,10 @@ use Bitbang\Http;
  *
  * @author  Miloslav Hůla (https://github.com/milo)
  */
-class FileCache extends Http\Sanity implements Http\ICache
+class FileCache implements Http\ICache
 {
+	use Http\Strict;
+
 	const DIRECTORY = 'bitbang.http';
 
 	/** @var string */

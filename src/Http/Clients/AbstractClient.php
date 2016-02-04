@@ -10,8 +10,10 @@ use Bitbang\Http;
  *
  * @author  Miloslav Hůla (https://github.com/milo)
  */
-abstract class AbstractClient extends Http\Sanity implements Http\IClient
+abstract class AbstractClient implements Http\IClient
 {
+	use Http\Strict;
+
 	/** @var int[]|NULL  follow Location header on these response codes, NULL always, empty array never */
 	public $redirectCodes;
 

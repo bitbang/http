@@ -10,8 +10,10 @@ use Bitbang\Http;
  *
  * @author  Miloslav Hůla (https://github.com/milo)
  */
-class CachedClient extends Http\Sanity implements Http\IClient
+class CachedClient implements Http\IClient
 {
+	use Http\Strict;
+
 	/** @var Http\ICache */
 	private $cache;
 

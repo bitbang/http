@@ -8,8 +8,10 @@ namespace Bitbang\Http;
  *
  * @author  Miloslav Hůla (https://github.com/milo)
  */
-class Browser extends Sanity
+class Browser
 {
+	use Strict;
+
 	/** @var IDecoder */
 	private $decoder;
 

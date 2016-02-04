@@ -4,13 +4,13 @@ namespace Bitbang\Http;
 
 
 /**
- * Undefined member access check. Stolen from Nette\Object (http://nette.org).
+ * Undefined member access check. Stolen from Nette Framework (https://nette.org).
+ * @internal
  */
-abstract class Sanity
+trait Strict
 {
 	/**
 	 * @param  string
-	 *
 	 * @throws LogicException
 	 */
 	public function & __get($name)
