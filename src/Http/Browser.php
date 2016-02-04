@@ -38,7 +38,7 @@ class Browser
 		if ($baseUrl !== NULL) {
 			$baseUrl = (string) $baseUrl;
 			if (!array_key_exists('scheme', Helpers::parseUrl($baseUrl))) {
-				throw new LogicException("The '$baseUrl' URL is not absolute.'");
+				throw new LogicException("Base URL '$baseUrl' must be absolute.");
 			}
 		}
 
