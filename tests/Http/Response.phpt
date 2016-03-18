@@ -29,6 +29,11 @@ Assert::exception(function() use ($response, $previous) {
 
 class TestCoder implements Http\ICoder
 {
+	public function encode(Http\Request $request, $body)
+	{
+		return $body;
+	}
+
 	public function decode(Http\Response $response)
 	{
 		return 'Decoded: ' . $response->getBody();

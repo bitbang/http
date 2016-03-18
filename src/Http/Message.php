@@ -35,8 +35,11 @@ abstract class Message
 				$this->headers[strtolower($name)] = array_values($values);
 			}
 		}
-		$this->body = $body;
+
 		$this->coder = $coder ?: new Coders\DefaultCoder;
+		$this->body = $this instanceof Request
+			? $this->coder->encode($this, $body)
+			: $body;
 	}
 
 

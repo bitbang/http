@@ -10,6 +10,15 @@ namespace Bitbang\Http;
  */
 interface ICoder
 {
+
+	/**
+	 * @param  Request
+	 * @param  mixed|NULL
+	 * @return mixed
+	 */
+	function encode(Request $request, $body);
+
+
 	/**
 	 * @param  Response
 	 * @return mixed

@@ -20,6 +20,7 @@ class MockBrowser extends Http\Browser
 
 class MockCoder implements Http\ICoder
 {
+	function encode(Http\Request $request, $body) {}
 	function decode(Http\Response $response) {}
 }
 
