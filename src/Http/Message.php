@@ -24,7 +24,7 @@ abstract class Message
 
 	/**
 	 * @param  array
-	 * @param  string|NULL
+	 * @param  mixed|NULL
 	 * @param  IDecoder
 	 */
 	public function __construct(array $headers = [], $body = NULL, IDecoder $decoder = NULL)

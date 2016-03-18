@@ -126,42 +126,42 @@ class Browser
 
 	/**
 	 * @param  string
-	 * @param  string
+	 * @param  mixed
 	 * @param  array
 	 * @return Response
 	 */
 	public function patch($url, $body, array $headers = [])
 	{
 		return $this->process(
-				$this->createRequest(Request::PATCH, $url, $headers, (string) $body)
+				$this->createRequest(Request::PATCH, $url, $headers, $body)
 		);
 	}
 
 
 	/**
 	 * @param  string
-	 * @param  string
+	 * @param  mixed
 	 * @param  array
 	 * @return Response
 	 */
 	public function post($url, $body, array $headers = [])
 	{
 		return $this->process(
-				$this->createRequest(Request::POST, $url, $headers, (string) $body)
+				$this->createRequest(Request::POST, $url, $headers, $body)
 		);
 	}
 
 
 	/**
 	 * @param  string
-	 * @param  string
+	 * @param  mixed
 	 * @param  array
 	 * @return Response
 	 */
 	public function put($url, $body = '', array $headers = [])
 	{
 		return $this->process(
-				$this->createRequest(Request::PUT, $url, $headers, (string) $body)
+				$this->createRequest(Request::PUT, $url, $headers, $body)
 		);
 	}
 
@@ -170,7 +170,7 @@ class Browser
 	 * @param  string
 	 * @param  string
 	 * @param  array
-	 * @param  string|NULL
+	 * @param  mixed|NULL
 	 * @return Request
 	 */
 	protected function createRequest($method, $url, array $headers, $body = NULL)
