@@ -135,12 +135,12 @@ test(function() {
 });
 
 
-# Decoder
+# Coder
 test(function() {
 	$message = new TestMessage;
-	Assert::type('Bitbang\Http\Decoders\DefaultDecoder', $message->getDecoder());
+	Assert::type('Bitbang\Http\Coders\DefaultCoder', $message->getCoder());
 
-	$decoder = new Http\Decoders\DefaultDecoder;
-	$message = new TestMessage([], NULL, $decoder);
-	Assert::same($decoder, $message->getDecoder());
+	$coder = new Http\Coders\DefaultCoder;
+	$message = new TestMessage([], NULL, $coder);
+	Assert::same($coder, $message->getCoder());
 });

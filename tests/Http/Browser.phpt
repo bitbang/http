@@ -18,7 +18,7 @@ class MockBrowser extends Http\Browser
 	}
 }
 
-class MockDecoder implements Http\IDecoder
+class MockCoder implements Http\ICoder
 {
 	function decode(Http\Response $response) {}
 }
@@ -27,7 +27,7 @@ class MockClient implements Http\IClient
 {
 	function process(Http\Request $request)
 	{
-		return new Http\Response(0, $request->getHeaders(), $request->getUrl(), $request->getDecoder());
+		return new Http\Response(0, $request->getHeaders(), $request->getUrl(), $request->getCoder());
 	}
 
 	function onRequest($callback) {}
@@ -43,13 +43,13 @@ class BrowserTestCase extends Tester\TestCase
 		$browser = new Http\Browser(
 			'http://hostname.tld',
 			['Default' => 'Header'],
-			$decoder = new MockDecoder,
+			$coder = new MockCoder,
 			$client = new MockClient
 		);
 
 		Assert::same('http://hostname.tld', $browser->getBaseUrl());
 		Assert::same(['Default' => 'Header'], $browser->getDefaultHeaders());
-		Assert::same($decoder, $browser->getDecoder());
+		Assert::same($coder, $browser->getCoder());
 		Assert::same($client, $browser->getClient());
 	}
 

@@ -84,7 +84,7 @@ class StreamClient extends AbstractClient
 		$options = array_replace_recursive($options, $this->options);
 
 		list($code, $headers, $body) = $this->fileGetContents($request->getUrl(), $options);
-		return new Http\Response($code, $headers, $body, $request->getDecoder());
+		return new Http\Response($code, $headers, $body, $request->getCoder());
 	}
 
 

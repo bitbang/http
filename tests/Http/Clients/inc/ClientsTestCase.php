@@ -268,15 +268,15 @@ abstract class ClientsTestCase extends Tester\TestCase
 	}
 
 
-	final public function testDecoderPassing()
+	final public function testcoderPassing()
 	{
-		$decoder = new Bitbang\Http\Decoders\DefaultDecoder;
+		$coder = new Bitbang\Http\Coders\DefaultCoder;
 
 		$response = $this->createClient()->process(
-			new Request('GET', $this->baseUrl . '/200', [], NULL, $decoder)
+			new Request('GET', $this->baseUrl . '/200', [], NULL, $coder)
 		);
 
-		Assert::same($decoder, $response->getDecoder());
+		Assert::same($coder, $response->getCoder());
 	}
 
 }

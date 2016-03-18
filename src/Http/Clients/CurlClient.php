@@ -127,7 +127,7 @@ class CurlClient extends AbstractClient
 			throw new Http\BadResponseException('HTTP status code is missing: ' . curl_error($this->curl), curl_errno($this->curl));
 		}
 
-		return new Http\Response($code, $responseHeaders, $body, $request->getDecoder());
+		return new Http\Response($code, $responseHeaders, $body, $request->getCoder());
 	}
 
 }

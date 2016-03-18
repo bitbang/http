@@ -1,6 +1,6 @@
 <?php
 
-namespace Bitbang\Http\Decoders;
+namespace Bitbang\Http\Coders;
 
 use Bitbang\Http;
 
@@ -8,7 +8,7 @@ use Bitbang\Http;
 /**
  * @author  Miloslav Hůla (https://github.com/milo)
  */
-class DefaultDecoder implements Http\IDecoder
+class DefaultCoder implements Http\ICoder
 {
 	use Http\Strict;
 

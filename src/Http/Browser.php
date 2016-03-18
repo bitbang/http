@@ -12,8 +12,8 @@ class Browser
 {
 	use Strict;
 
-	/** @var IDecoder */
-	private $decoder;
+	/** @var ICoder */
+	private $coder;
 
 	/** @var IClient */
 	private $client;
@@ -28,12 +28,12 @@ class Browser
 	/**
 	 * @param  string|NULL $baseUrl
 	 * @param  array $defaultHeaders
-	 * @param  IDecoder $decoder
+	 * @param  ICoder $coder
 	 * @param  IClient  $client
-	 * @param  IDecoder
+	 * @param  ICoder
 	 * @throws LogicException  when base URL is not absolute
 	 */
-	public function __construct($baseUrl = NULL, array $defaultHeaders = [], IDecoder $decoder = NULL, IClient $client = NULL)
+	public function __construct($baseUrl = NULL, array $defaultHeaders = [], ICoder $coder = NULL, IClient $client = NULL)
 	{
 		if ($baseUrl !== NULL) {
 			$baseUrl = (string) $baseUrl;
@@ -44,7 +44,7 @@ class Browser
 
 		$this->baseUrl = $baseUrl;
 		$this->defaultHeaders = $defaultHeaders;
-		$this->decoder = $decoder ?: new Decoders\DefaultDecoder;
+		$this->coder = $coder ?: new Coders\DefaultCoder;
 		$this->client = $client ?: (extension_loaded('curl') ? new Clients\CurlClient : new Clients\StreamClient);
 	}
 
@@ -68,11 +68,11 @@ class Browser
 
 
 	/**
-	 * @return IDecoder
+	 * @return ICoder
 	 */
-	public function getDecoder()
+	public function getCoder()
 	{
-		return $this->decoder;
+		return $this->coder;
 	}
 
 
@@ -179,7 +179,7 @@ class Browser
 			$url = Helpers::absolutizeUrl($this->baseUrl, $url);
 		}
 
-		$request = new Request($method, $url, $headers, $body, $this->getDecoder());
+		$request = new Request($method, $url, $headers, $body, $this->getCoder());
 		foreach ($this->defaultHeaders as $name => $value) {
 			$request->addHeader($name, $value);
 		}

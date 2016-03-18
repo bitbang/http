@@ -18,16 +18,16 @@ abstract class Message
 	/** @var string|NULL */
 	private $body;
 
-	/** @var IDecoder */
-	private $decoder;
+	/** @var ICoder */
+	private $coder;
 
 
 	/**
 	 * @param  array
 	 * @param  mixed|NULL
-	 * @param  IDecoder
+	 * @param  ICoder
 	 */
-	public function __construct(array $headers = [], $body = NULL, IDecoder $decoder = NULL)
+	public function __construct(array $headers = [], $body = NULL, ICoder $coder = NULL)
 	{
 		foreach ($headers as $name => $values) {
 			$values = (array) $values;
@@ -36,7 +36,7 @@ abstract class Message
 			}
 		}
 		$this->body = $body;
-		$this->decoder = $decoder ?: new Decoders\DefaultDecoder;
+		$this->coder = $coder ?: new Coders\DefaultCoder;
 	}
 
 
@@ -191,11 +191,11 @@ abstract class Message
 
 
 	/**
-	 * @return IDecoder
+	 * @return ICoder
 	 */
-	public function getDecoder()
+	public function getCoder()
 	{
-		return $this->decoder;
+		return $this->coder;
 	}
 
 }
