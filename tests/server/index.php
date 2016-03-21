@@ -57,6 +57,9 @@ if ($requestUri === '/ping') {
 } elseif ($requestUri === '/method') {
 	echo "method-$_SERVER[REQUEST_METHOD]";
 
+} elseif ($requestUri === '/body') {
+	echo 'raw-' . file_get_contents('php://input');
+
 } else {
 	header('HTTP/1.1 500');
 	echo $message = "Missing request handler for '$requestUri' . \n";

@@ -268,6 +268,15 @@ abstract class ClientsTestCase extends Tester\TestCase
 	}
 
 
+	final public function testBodyIsPassing()
+	{
+		$response = $this->createClient()->process(
+			new Request('POST', $this->baseUrl . '/body', [], 'request-text')
+		);
+		Assert::same('raw-request-text', $response->getBody());
+	}
+
+
 	final public function testcoderPassing()
 	{
 		$coder = new Bitbang\Http\Coders\DefaultCoder;
