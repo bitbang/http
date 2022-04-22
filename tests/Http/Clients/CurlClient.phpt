@@ -40,8 +40,12 @@ class CurlClientTestCase extends ClientsTestCase
 	public function testClientSetupCallback()
 	{
 		$client = $this->createClient(function($context, $url) use (& $called) {
-			Assert::type('resource', $context);
-			Assert::same('curl', get_resource_type($context));
+			if (PHP_VERSION_ID < 80000) {
+				Assert::type('resource', $context);
+				Assert::same('curl', get_resource_type($context));
+			} else {
+				Assert::type('CurlHandle', $context);
+			}
 			Assert::match('%a%/ping', $url);
 
 			$called = TRUE;

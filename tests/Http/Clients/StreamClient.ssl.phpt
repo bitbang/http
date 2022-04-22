@@ -26,7 +26,7 @@ test(function() {
 
 	$e = Assert::exception(function() use ($e) {
 		throw $e->getPrevious();
-	}, 'ErrorException', '%a%failed to open stream%a%');
+	}, 'ErrorException', '%a%ailed to open stream%a%');
 
 	$e = Assert::exception(function() use ($e) {
 		throw $e->getPrevious();
